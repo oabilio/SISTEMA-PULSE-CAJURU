@@ -30,16 +30,10 @@ spi = SPI(2, baudrate=2500000, polarity=0, phase=0)
 spi.init()
 rdr = MFRC522(spi=spi, gpioRst=4, gpioCs=5)
 
-rfid_name = ["Teacher1",
-             "Teacher2",
-             "Student1",
-             "Student2",
-             "Student3"]
-rfid_uid = ["0xc97be5a2",
-            "0xe7458e7a",
-            "0x2907b498",
-            "0x29eec498",
-            "0x59e1f097"]
+rfid_name = ["Samuel",
+             "Abilio"]
+rfid_uid = ["0x66d7247e",
+            "0xe6877603"]
 
 def get_username(uid):
     index = 0
