@@ -6,15 +6,15 @@ from i2c_lcd import I2cLcd
 from machine import Pin
 from machine import SoftI2C
 from machine import SPI
+import time
+
+buzzer = Pin(2, Pin.OUT)
 
 DEFAULT_I2C_ADDR = 0x3f
 i2c = SoftI2C(scl=Pin(22, Pin.OUT, Pin.PULL_UP),
               sda=Pin(21, Pin.OUT, Pin.PULL_UP),
               freq=400000) 
 lcd = I2cLcd(i2c, DEFAULT_I2C_ADDR, 2, 16)
-
-red = Pin(14, Pin.OUT)
-grn = Pin(13, Pin.OUT)
 
 spi = SPI(2, baudrate=2500000, polarity=0, phase=0)
 # Using Hardware SPI pins:
@@ -67,10 +67,15 @@ while True:
             username = get_username(card_id)
             lcd.move_to(0, 1)
             if username != 0:
-                grn.value(True)
-                red.value(False)
+                buzzer.value(1)
+                time.sleep(0.1) 
+                buzzer.value(0) 
+                time.sleep(0.1)
                 lcd.putstr("Welcome {}".format(username))
             else:
-                grn.value(False)
-                red.value(True)
                 lcd.putstr(" Access Denied! ")
+                for i in range (2):
+                    buzzer.value(1)
+                    time.sleep(0.1) 
+                    buzzer.value(0) 
+                    time.sleep(0.1)
