@@ -8,6 +8,7 @@ from machine import SoftI2C
 from machine import SPI
 from umqtt.simple import MQTTClient
 import network
+import json
 import time
 
 last_msg = None
@@ -22,7 +23,7 @@ WIFI_PASSWORD = ""
 
 def callback(topic, msg):
     global last_msg
-    last_msg = msg.decode()
+    last_msg = json.loads(msg.decode())
     print("[ESP] Mensagem recebida:", last_msg)
 
 wifi = network.WLAN(network.STA_IF)
@@ -89,11 +90,23 @@ while True:
                 client.check_msg()
 
                 if last_msg:
+                    lcd.clear()
+                    lcd.move_to(0, 0)
+                    lcd.putstr(f"{card_id}")
                     lcd.move_to(0, 1)
-                    if "ERRO" in last_msg or "não está cadastrado" in last_msg:
-                        lcd.putstr("Acesso negado!")
+
+                    if last_msg["status"] == "ok":
+                        nome = last_msg.get("nome", "")
+                        msg = last_msg.get("msg", "Welcome!")
+                        lcd.putstr(f"{nome} - {msg}"[:16])
+                        buzzer.value(1)
+                        time.sleep(0.1)
+                        buzzer.value(0)
+                    else:
+                        lcd.putstr(last_msg["msg"][:16])
                         for i in range(2):
                             buzzer.value(1)
                             time.sleep(0.1)
                             buzzer.value(0)
                             time.sleep(0.1)
+                    break

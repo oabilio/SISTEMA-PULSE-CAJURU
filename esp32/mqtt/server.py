@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import time
+import json
 from data import usuarios
 
 # Configuração MQTT
@@ -13,19 +14,29 @@ def on_message(client, userdata, message):
     print("Recebido do ESP:", msg_esp)
 
     if msg_esp == "sistema pulse":
-        client.publish(MQTT_TOPIC_SEND, "PONTO ELETRONICO - Leitura feita") # Enviando confirmação pra ESP
+        payload = {"status": "ok", "msg": "Leitura feita"}
+        client.publish(MQTT_TOPIC_SEND, json.dumps(payload))
     
     elif msg_esp in usuarios:
-        nome = usuarios.get(msg_esp)
+        nome = usuarios[msg_esp]
         hora_atual = time.localtime()
         hora_str = "{:02d}:{:02d}".format(hora_atual[3], hora_atual[4])
 
-        msg = f'PONTO ELETRONICO - {nome} entrou as {hora_str}'
-        client.publish(MQTT_TOPIC_SEND, msg)
+        payload = {
+            "status": "ok",
+            "rfid": msg_esp,
+            "nome": nome,
+            "msg": f"Welcome! {hora_str}"
+        }
+        client.publish(MQTT_TOPIC_SEND, json.dumps(payload))
     
     else:
-        msg = f'PONTO ELETRONICO [ERRO] - {msg_esp} não está cadastrado.'
-        client.publish(MQTT_TOPIC_SEND, msg)
+        payload = {
+            "status": "erro",
+            "rfid": msg_esp,
+            "msg": "Access Denied!"
+        }
+        client.publish(MQTT_TOPIC_SEND, json.dumps(payload))
 
 # Configuração do cliente MQTT
 client = mqtt.Client("pc_samuel_20082025")
