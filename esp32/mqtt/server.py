@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import time
+from data import usuarios
 
 # Configuração MQTT
 MQTT_BROKER = "broker.mqttdashboard.com"
@@ -8,14 +9,23 @@ MQTT_TOPIC_RECEIVE = "exp.criativas/samuel/pcparaesp"
 
 # Callback executado quando uma mensagem MQTT é recebida
 def on_message(client, userdata, message):
-    print("Frase recebida do ESP:", message.payload.decode())
+    msg_esp = message.payload.decode()
+    print("Recebido do ESP:", msg_esp)
+
+    if msg_esp == "sistema pulse":
+        client.publish(MQTT_TOPIC_SEND, "PONTO ELETRONICO - Leitura feita") # Enviando confirmação pra ESP
     
-    # Atualiza hora atual no momento da requisição
-    hora_atual = time.localtime()
-    hora_str = "{:02d}:{:02d}".format(hora_atual[3], hora_atual[4])  # formato HH,MM
+    elif msg_esp in usuarios:
+        nome = usuarios.get(msg_esp)
+        hora_atual = time.localtime()
+        hora_str = "{:02d}:{:02d}".format(hora_atual[3], hora_atual[4])
+
+        msg = f'PONTO ELETRONICO - {nome} entrou as {hora_str}'
+        client.publish(MQTT_TOPIC_SEND, msg)
     
-    print("Enviando resposta pra esp:", hora_str)
-    client.publish(MQTT_TOPIC_SEND, hora_str)  # Envia resposta
+    else:
+        msg = f'PONTO ELETRONICO [ERRO] - {msg_esp} não está cadastrado.'
+        client.publish(MQTT_TOPIC_SEND, msg)
 
 # Configuração do cliente MQTT
 client = mqtt.Client("pc_samuel_20082025")
