@@ -102,6 +102,13 @@ while True:
                         buzzer.value(1)
                         time.sleep(0.1)
                         buzzer.value(0)
+                    elif last_msg["status"] == "erro":
+                        nome = last_msg.get("nome", "")
+                        msg = last_msg.get("msg", "Tag errada macaco")
+                        lcd.putstr(f"{nome} - {msg}"[:16])
+                        buzzer.value(1)
+                        time.sleep(0.1)
+                        buzzer.value(0)
                     else:
                         lcd.putstr(last_msg["msg"][:16])
                         for i in range(2):
