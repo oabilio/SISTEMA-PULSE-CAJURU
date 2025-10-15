@@ -24,7 +24,16 @@ WIFI_PASSWORD = ""
 def callback(topic, msg):
     global last_msg
     last_msg = json.loads(msg.decode())
-    print("[ESP] Mensagem recebida:", last_msg)
+    
+    status = last_msg.get("status")
+    rfid = last_msg.get("rfid", "N/A")
+    nome = last_msg.get("nome", "")
+    mensagem = last_msg.get("msg", "")
+
+    if status == "ok":
+        print(f"[ESP] {nome} ({rfid}) - {mensagem}")
+    else:
+        print(f"[ESP] ({rfid}) - {mensagem}")
 
 wifi = network.WLAN(network.STA_IF)
 wifi.active(True)
@@ -48,20 +57,11 @@ i2c = SoftI2C(scl=Pin(22, Pin.OUT, Pin.PULL_UP),
 lcd = I2cLcd(i2c, DEFAULT_I2C_ADDR, 2, 16)
 
 spi = SPI(2, baudrate=2500000, polarity=0, phase=0)
-# Using Hardware SPI pins:
-#     sck=18   # yellow
-#     mosi=23  # orange
-#     miso=19  # blue
-#     rst=4    # white
-#     cs=5     # green, DS
-# *************************
-# To use SoftSPI,
-# from machine import SOftSPI
-# spi = SoftSPI(baudrate=100000, polarity=0, phase=0, sck=sck, mosi=mosi, miso=miso)
+
 spi.init()
 rdr = MFRC522(spi=spi, gpioRst=4, gpioCs=5)
 
-print("Place card")
+print("[ESP] Place card")
 
 lcd.clear()
 lcd.move_to(0, 0)
@@ -77,7 +77,7 @@ while True:
             lcd.putstr("RFID: ")
             
             card_id = "0x%02x%02x%02x%02x" %(raw_uid[0], raw_uid[1], raw_uid[2], raw_uid[3])
-            print("UID:", card_id)
+            print("[ESP] UID:", card_id)
             lcd.putstr(card_id)
             client.publish(MQTT_TOPIC_SEND, "sistema pulse")
 
