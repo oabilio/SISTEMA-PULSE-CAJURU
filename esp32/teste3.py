@@ -7,7 +7,7 @@ from machine import Pin
 from machine import SoftI2C
 from machine import SPI
 from umqtt.simple import MQTTClient
-
+import network
 import time
 
 MQTT_CLIENT_ID = "esp32_samuel_20082025"
