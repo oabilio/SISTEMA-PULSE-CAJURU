@@ -1,5 +1,7 @@
 import paho.mqtt.client as mqtt
 import time
+import json
+from data import usuarios
 
 # Configuração MQTT
 MQTT_BROKER = "broker.mqttdashboard.com"
@@ -8,14 +10,29 @@ MQTT_TOPIC_RECEIVE = "exp.criativas/samuel/pcparaesp"
 
 # Callback executado quando uma mensagem MQTT é recebida
 def on_message(client, userdata, message):
-    print("Frase recebida do ESP:", message.payload.decode())
+    msg_esp = message.payload.decode()
+    print("Recebido do ESP:", msg_esp)
     
-    # Atualiza hora atual no momento da requisição
-    hora_atual = time.localtime()
-    hora_str = "{:02d}:{:02d}".format(hora_atual[3], hora_atual[4])  # formato HH,MM
+    if msg_esp in usuarios:
+        nome = usuarios[msg_esp]
+        hora_atual = time.localtime()
+        hora_str = "{:02d}:{:02d}".format(hora_atual[3], hora_atual[4])
+
+        payload = {
+            "status": "ok",
+            "rfid": msg_esp,
+            "nome": nome,
+            "msg": f"Welcome! {hora_str}"
+        }
+        client.publish(MQTT_TOPIC_SEND, json.dumps(payload))
     
-    print("Enviando resposta pra esp:", hora_str)
-    client.publish(MQTT_TOPIC_SEND, hora_str)  # Envia resposta
+    else:
+        payload = {
+            "status": "erro",
+            "rfid": msg_esp,
+            "msg": "Access Denied!"
+        }
+        client.publish(MQTT_TOPIC_SEND, json.dumps(payload))
 
 # Configuração do cliente MQTT
 client = mqtt.Client("pc_samuel_20082025")
