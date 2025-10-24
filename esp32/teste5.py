@@ -18,8 +18,8 @@ MQTT_BROKER = "broker.mqttdashboard.com"
 MQTT_TOPIC_SEND = "exp.criativas/samuel/pcparaesp"
 MQTT_TOPIC_RECEIVE = "exp.criativas/samuel/espparapc"
 
-WIFI_SSID = "Visitantes"
-WIFI_PASSWORD = ""
+WIFI_SSID = "Marco AP Repet"
+WIFI_PASSWORD = "M75D7457"
 
 def callback(topic, msg):
     global last_msg
