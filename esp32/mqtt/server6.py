@@ -10,9 +10,6 @@ MQTT_TOPIC_RECEIVE = "exp.criativas/samuel/pcparaesp"
 def on_message(client, userdata, message):
     msg_esp = message.payload.decode()
     print("Recebido do ESP:", msg_esp)
-
-    if msg_esp == "sistema pulse":
-        return 
     
     nome = None
     identificador_lido = None

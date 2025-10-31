@@ -13,7 +13,7 @@ MQTT_BROKER = "broker.mqttdashboard.com"
 MQTT_TOPIC_SEND = "exp.criativas/samuel/pcparaesp"
 MQTT_TOPIC_RECEIVE = "exp.criativas/samuel/espparapc"
 WIFI_SSID = "Visitantes"
-WIFI_PASSWORD = " "
+WIFI_PASSWORD = ""	
 
 def callback(topic, msg):
     global last_msg
@@ -122,13 +122,6 @@ def wait_for_server_response(display_id):
             
             time.sleep(3)
             return
-
-    lcd.clear()
-    lcd.move_to(0, 0)
-    lcd.putstr("Sem resposta")
-    lcd.move_to(0, 1)
-    lcd.putstr("do servidor")
-    time.sleep(3)
 
 current_state = "MODE_SELECT"
 input_buffer = ""
