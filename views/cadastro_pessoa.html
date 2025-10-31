@@ -1,0 +1,70 @@
+<html>
+
+<head>
+    <title>SISTEMA PULSE | Cadastrar Pessoa</title>
+</head>
+
+<body>
+    <h1>Cadastro de Pessoa</h1>
+    <form action="http://localhost:8080/add_pessoa" method="post">
+        <h2>Novo endereço:</h2>
+        <p>Logradouro:</p>
+        <p><input type="text" name="logradouro" placeholder="Logradouro" required /></p>
+        <p>Número:</p>
+        <p><input type="number" name="numero" placegolder="Número" /></p>
+        <p>Bairro:</p>
+        <p><input type="text" name="bairro" placeholder="Bairro" /></p>
+        <p>Cidade:</p>
+        <p><input type="text" name="cidade" placeholder="Cidade" required /></p>
+        <p>Estado:</p>
+        <select id="estado" name="estado" required>
+            <option value="">Selecione um estado</option>
+            <option value="AC">Acre (AC)</option>
+            <option value="AL">Alagoas (AL)</option>
+            <option value="AP">Amapá (AP)</option>
+            <option value="AM">Amazonas (AM)</option>
+            <option value="BA">Bahia (BA)</option>
+            <option value="CE">Ceará (CE)</option>
+            <option value="DF">Distrito Federal (DF)</option>
+            <option value="ES">Espírito Santo (ES)</option>
+            <option value="GO">Goiás (GO)</option>
+            <option value="MA">Maranhão (MA)</option>
+            <option value="MT">Mato Grosso (MT)</option>
+            <option value="MS">Mato Grosso do Sul (MS)</option>
+            <option value="MG">Minas Gerais (MG)</option>
+            <option value="PA">Pará (PA)</option>
+            <option value="PB">Paraíba (PB)</option>
+            <option value="PR">Paraná (PR)</option>
+            <option value="PE">Pernambuco (PE)</option>
+            <option value="PI">Piauí (PI)</option>
+            <option value="RJ">Rio de Janeiro (RJ)</option>
+            <option value="RN">Rio Grande do Norte (RN)</option>
+            <option value="RS">Rio Grande do Sul (RS)</option>
+            <option value="RO">Rondônia (RO)</option>
+            <option value="RR">Roraima (RR)</option>
+            <option value="SC">Santa Catarina (SC)</option>
+            <option value="SP">São Paulo (SP)</option>
+            <option value="SE">Sergipe (SE)</option>
+            <option value="TO">Tocantins (TO)</option>
+        </select>
+        <p>CEP:</p>
+        <p><input type="text" name="cep" placeholder="CEP"/></p>
+        <p>Complemento:</p>
+        <p><input type="text" name="complemento" placeholder="Complemento"/></p>
+
+        <h2>Nova pessoa:</h2>
+        <p>Nome:</p>
+        <p><input type="text" name="first_name" placeholder="Nome" required /></p>
+        <p>CPF:</p>
+        <p><input type="text" name="cpf" placeholder="CPF" /></p>
+        <p>Telefone:</p>
+        <p><input type="text" name="telefone" placeholder="Telefone" /></p>
+        <p>Email:</p>
+        <p><input type=text name="email" placeholder="Email" /></p>
+        <p>Data de Nascimento</p>
+        <p><input type="date" name="data_nasc" placeholder="Data de nascimento" /></p>
+        <p><input type="submit" value="Entrar" /></p>
+    </form>
+</body>
+
+</html>
