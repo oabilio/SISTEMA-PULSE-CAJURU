@@ -12,5 +12,3 @@ class Usuario(db.Model):
     senha_hash = db.Column(db.String(256), nullable=False)
     status = db.Column(db.String(10), default="ativo")
     tipo = db.Column(db.String(10), default="comum")
-
-    pessoa = db.relationship('Pessoa', back_populates='usuario')

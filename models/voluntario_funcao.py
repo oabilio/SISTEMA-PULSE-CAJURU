@@ -1,3 +1,4 @@
+# voluntario_funcao.py
 from models.db import db
 
 voluntario_funcao_association = db.Table('voluntario_funcao',

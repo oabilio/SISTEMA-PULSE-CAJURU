@@ -12,9 +12,7 @@ class Funcao(db.Model):
     ativo = db.Column(db.Boolean, default=True)
     status = db.Column(db.String(50))
     
-    usuarios = db.relationship('Usuario', back_populates='funcao', lazy='dynamic')
-    
     voluntarios = db.relationship('Voluntario', 
                                   secondary=voluntario_funcao_association, 
-                                  back_populates='funcoes', 
+                                  backref='funcoes', 
                                   lazy='dynamic')

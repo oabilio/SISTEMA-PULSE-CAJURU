@@ -1,3 +1,4 @@
+# movimentacao.py
 from models.db import db
 from sqlalchemy.sql import func
 
@@ -10,4 +11,4 @@ class Movimentacao(db.Model):
     destino = db.Column(db.String(100))   
     id_voluntario = db.Column(db.Integer, db.ForeignKey('voluntario.id'), nullable=False)
     
-    voluntario = db.relationship('Voluntario', back_populates='movimentacoes')
+    voluntario = db.relationship('Voluntario', backref='movimentacoes')

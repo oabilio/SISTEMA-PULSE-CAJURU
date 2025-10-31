@@ -1,3 +1,4 @@
+# ponto.py
 from models.db import db
 from sqlalchemy.sql import func
 
@@ -15,4 +16,4 @@ class Ponto(db.Model):
     manual = db.Column(db.Boolean, default=False)
     id_voluntario = db.Column(db.Integer, db.ForeignKey('voluntario.id'), nullable=False)
     
-    voluntario = db.relationship('Voluntario', back_populates='pontos')
+    voluntario = db.relationship('Voluntario', backref='pontos')

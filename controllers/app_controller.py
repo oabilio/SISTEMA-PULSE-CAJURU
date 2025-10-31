@@ -2,6 +2,7 @@
 from flask import Flask, render_template, redirect
 from flask_login import LoginManager, login_required
 from controllers.login_controller import login_bp, User
+from controllers.pessoas_controller import pessoas_bp
 from models.db import db, instance
 from data import users
 
@@ -24,6 +25,7 @@ def create_app():
     db.init_app(app)
 
     app.register_blueprint(login_bp, url_prefix='/')
+    app.register_blueprint(pessoas_bp, url_prefix='/')
 
     @login_manager.user_loader
     def load_user(user_id):
