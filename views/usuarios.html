@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <title>SISTEMA PULSE | Usuários</title>
+</head>
+
+<body>
+    <h1>Cadastro e Gerenciamento de Usuários</h1>
+    <form action="http://localhost:8080/validated_user" method="post">
+        <p>Nome:</p>
+        <p><input type="text" name="first_name" placeholder="Nome" required /></p>
+        <p>Sobrenome:</p>
+        <p><input type="text" name="last_name" placeholder="Sobrenome" required /></p>
+        <p>Senha:</p>
+        <p><input type="text" name="password" placeholder="Senha" required /></p>
+        <p>Confirme a Senha:</p>
+        <p><input type="text" name="confirm_password" placeholder="Confirme a senha" required /></p>
+        <p>Tipo:</p>
+        <select id="type" name="type">
+            <option value="comum">Comum</option>
+            <option value="admin">Admin</option>
+        </select>
+        <p>Status:</p>
+        <select id="status" name="status">
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Inativo</option>
+        </select>
+        <p><input type="submit" value="Entrar" /></p>
+    </form>
+</body>
+
+</html>
