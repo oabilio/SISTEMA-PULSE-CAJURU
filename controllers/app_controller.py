@@ -1,10 +1,10 @@
 # controllers/app_controller.py
 from flask import Flask, render_template, redirect
 from flask_login import LoginManager, login_required
-from controllers.login_controller import login_bp, User
+from controllers.login_controller import login_bp
 from controllers.pessoas_controller import pessoas_bp
 from models.db import db, instance
-from data import users
+from models.user.usuarios import Usuario
 
 def create_app():
     app = Flask(__name__,
@@ -29,9 +29,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        if user_id in users:
-            return User(user_id)
-        return None
+        return Usuario.query.get(int(user_id))
 
     @login_manager.unauthorized_handler
     def unauthorized():

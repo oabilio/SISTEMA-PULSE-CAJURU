@@ -3,6 +3,7 @@ from flask import Blueprint, request, render_template
 from flask_login import login_required
 from models.user.pessoa import Pessoa
 from models.user.endereco import Endereco
+from datetime import datetime
 
 pessoas_bp = Blueprint("pessoas", __name__, template_folder="../views")
 
@@ -18,7 +19,8 @@ def add_pessoa():
     cpf = request.form.get("cpf")
     telefone = request.form.get("telefone")
     email = request.form.get("email")
-    data_nasc = request.form.get("data_nasc")
+    data_nasc_str = request.form.get("data_nasc")
+    data_nasc_obj = datetime.strptime(data_nasc_str, '%Y-%m-%d').date()
 
     logradouro = request.form.get("logradouro")
     numero = request.form.get("numero")
@@ -28,7 +30,7 @@ def add_pessoa():
     cep = request.form.get("cep")
     complemento = request.form.get("complemento")
 
-    pessoa = Pessoa.save_pessoa(nome, cpf, telefone, data_nasc, email)
+    pessoa = Pessoa.save_pessoa(nome, cpf, telefone, data_nasc_obj, email)
     Endereco.save_endereco(pessoa.id, logradouro, numero, bairro, cidade, estado, cep, complemento)
     
     return render_template("home.html")
