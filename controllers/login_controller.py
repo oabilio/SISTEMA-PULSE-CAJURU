@@ -24,7 +24,7 @@ def validated_user():
         login_user(usuario)
         return redirect("/home")
 
-    flash("Login ou senha incorretos.")
+    flash("Login ou senha incorretos.", "error")
     return redirect(url_for("login.index"))
 
 @login_bp.route("/logoff")

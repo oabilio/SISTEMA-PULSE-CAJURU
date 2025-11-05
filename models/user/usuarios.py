@@ -46,3 +46,6 @@ class Usuario(db.Model, UserMixin):
     @staticmethod
     def get_usuarios():
         return Usuario.query.all()
+    
+    def has_role(self, role_name):
+        return self.role_name == role_name

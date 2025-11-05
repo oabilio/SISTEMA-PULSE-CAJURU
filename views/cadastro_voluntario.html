@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Voluntários{% endblock %}
+
+{% block header_title %}
+    Cadastrar Voluntário
+{% endblock %}
+
+{% block content %}
+    <form action="/cadastrar_voluntario" method="post">
+        <label for="pessoa">Selecione a Pessoa:</label><br>
+        <select name="pessoa_id" id="pessoa" required>
+            <option value="">-- Selecione --</option>
+            {% for pessoa in pessoas %}
+                <option value="{{ pessoa.id }}">{{ pessoa.nome }} - {{ pessoa.email }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label for="codigo_rfid">Código RFID (opcional):</label><br>
+        <input type="text" name="codigo_rfid" id="codigo_rfid" placeholder="Digite o código RFID">
+        <br><br>
+
+        <input type="submit" value="Cadastrar">
+    </form>
+{% endblock %}

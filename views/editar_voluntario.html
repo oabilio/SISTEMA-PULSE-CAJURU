@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Editar Voluntário{% endblock %}
+
+{% block header_title %}
+Editar Voluntário
+{% endblock %}
+
+{% block content %}
+<h2>Editar Voluntário: {{ voluntario.pessoa.nome }}</h2>
+
+<form method="POST">
+    <div>
+        <label for="codigo_rfid">Código RFID:</label>
+        <input type="text" name="codigo_rfid" id="codigo_rfid" value="{{ voluntario.codigo_rfid }}">
+    </div>
+
+    <div>
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+            <option value="ativo" {% if voluntario.status == 'ativo' %}selected{% endif %}>Ativo</option>
+            <option value="inativo" {% if voluntario.status == 'inativo' %}selected{% endif %}>Inativo</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Funções:</label>
+        <div>
+            {% for funcao in funcoes_disponiveis %}
+                <input type="checkbox" name="funcoes" value="{{ funcao.id }}"
+                    {% if funcao in voluntario.funcoes %}checked{% endif %}>
+                {{ funcao.nome }}<br>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <button type="submit">Atualizar Voluntário</button>
+        <a href="{{ url_for('voluntarios.voluntarios') }}">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

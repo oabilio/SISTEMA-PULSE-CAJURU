@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Voluntários{% endblock %}
+
+{% block header_title %}
+Lista de Voluntários
+{% endblock %}
+
+{% block content %}
+<a href="/cadastrar_voluntario">Cadastrar Voluntario</a>
+<br><br>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Nome do Voluntário</th>
+            <th>Funções</th>
+            <th>Código RFID</th>
+            <th>Data de Entrada</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for voluntario in voluntarios %}
+        <tr>
+            <td>{{ voluntario.pessoa.nome }}</td>
+            <td>
+                {% if voluntario.funcoes|length > 0 %}
+                {{ voluntario.funcoes | map(attribute='nome') | join(', ') }}
+                {% else %}
+                Nenhuma
+                {% endif %}
+            </td>
+            <td>{{ voluntario.codigo_rfid or '-' }}</td>
+            <td>{{ voluntario.data_entrada.strftime('%d/%m/%Y %H:%M') if voluntario.data_entrada else '-' }}</td>
+            <td>{{ voluntario.status }}</td>
+            <td>
+                <a href="{{ url_for('voluntarios.editar_voluntario', voluntario_id=voluntario.id) }}">Editar</a> |
+                <a href="{{ url_for('voluntarios.deletar_voluntario', voluntario_id=voluntario.id) }}"
+                    onclick="return confirm('Deseja realmente deletar o voluntário {{ voluntario.pessoa.nome }}?');">
+                    Deletar
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -30,14 +30,14 @@ def create_db(app: Flask):
 
         Usuario.save_usuario(
             pessoa_id=pessoa_admin.id,
-            login="admin",
+            login="abiliopedro",
             senha="admin123",
             role_id=admin_role.id
         )
 
         Usuario.save_usuario(
             pessoa_id=pessoa_user.id,
-            login="user",
+            login="samuelpereira",
             senha="user123",
             role_id=comum_role.id
         )

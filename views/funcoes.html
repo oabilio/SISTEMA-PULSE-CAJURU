@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Funções{% endblock %}
+
+{% block header_title %}
+Lista de Funções
+{% endblock %}
+
+{% block content %}
+
+    <a href="/cadastrar_funcao">Cadastrar Nova Função</a>
+    <br><br>
+
+    {% if funcoes %}
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Custo/Hora</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for funcao in funcoes %}
+                <tr>
+                    <td>{{ funcao.id }}</td>
+                    <td>{{ funcao.nome }}</td>
+                    <td>{{ funcao.descricao or "-" }}</td>
+                    <td>{{ funcao.custo_hora }}</td>
+                    <td>
+                        <a href="/edit_funcao?id={{ funcao.id }}">Editar</a> |
+                        <a href="/deletar_funcao?id={{ funcao.id }}" onclick="return confirm('Deseja realmente deletar esta função?')">Deletar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhuma função cadastrada.</p>
+    {% endif %}
+    
+{% endblock %}
