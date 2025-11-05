@@ -1,32 +1,46 @@
-<html>
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Usuários</h2>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="alert alert-info">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 
-<head>
-    <title>SISTEMA PULSE | Usuários</title>
-</head>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Login</th>
+        <th>Função</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for usuario in usuarios %}
+      <tr>
+        <td>{{ usuario.pessoa.nome }}</td>
+        <td>{{ usuario.login }}</td>
+        <td>{{ usuario.role.name }}</td>
+        <td>{{ usuario.status }}</td>
+        <td>
+          <a href="{{ url_for('usuarios_bp.editar_usuario', usuario_id=usuario.id) }}" class="btn btn-sm btn-primary">Editar</a>
+          {% if usuario.status == 'ativo' %}
+          <a href="{{ url_for('usuarios_bp.deletar_usuario', usuario_id=usuario.id) }}" class="btn btn-sm btn-danger"
+             onclick="return confirm('Deseja realmente desativar este usuário?')">Desativar</a>
+          {% else %}
+          <button class="btn btn-sm btn-secondary" disabled>Inativo</button>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-<body>
-    <h1>Cadastro e Gerenciamento de Usuários</h1>
-    <form action="http://localhost:8080/registrar_usuario" method="post">
-        <p>Nome:</p>
-        <p><input type="text" name="first_name" placeholder="Nome" required /></p>
-        <p>Sobrenome:</p>
-        <p><input type="text" name="last_name" placeholder="Sobrenome" required /></p>
-        <p>Senha:</p>
-        <p><input type="text" name="password" placeholder="Senha" required /></p>
-        <p>Confirme a Senha:</p>
-        <p><input type="text" name="confirm_password" placeholder="Confirme a senha" required /></p>
-        <p>Tipo:</p>
-        <select id="type" name="type">
-            <option value="comum">Comum</option>
-            <option value="admin">Admin</option>
-        </select>
-        <p>Status:</p>
-        <select id="status" name="status">
-            <option value="ativo">Ativo</option>
-            <option value="inativo">Inativo</option>
-        </select>
-        <p><input type="submit" value="Entrar" /></p>
-    </form>
-</body>
-
-</html>
+  <a href="{{ url_for('usuarios_bp.cadastrar_usuario') }}" class="btn btn-success">+ Novo Usuário</a>
+</div>
+{% endblock %}

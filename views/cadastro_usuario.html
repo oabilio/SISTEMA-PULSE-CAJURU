@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Cadastrar Usuário</h2>
+
+  <form method="POST">
+    <div class="mb-3">
+      <label for="pessoa_id">Pessoa:</label>
+      <select class="form-select" name="pessoa_id" required>
+        {% for pessoa in pessoas %}
+        <option value="{{ pessoa.id }}">{{ pessoa.nome }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="login">Login:</label>
+      <input type="text" class="form-control" name="login" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="senha">Senha:</label>
+      <input type="password" class="form-control" name="senha" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="role_id">Função:</label>
+      <select class="form-select" name="role_id" required>
+        {% for role in roles %}
+        <option value="{{ role.id }}">{{ role.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a href="{{ url_for('usuarios_bp.usuarios') }}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
