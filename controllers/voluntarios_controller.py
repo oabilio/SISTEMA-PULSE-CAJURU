@@ -22,7 +22,7 @@ def cadastrar_voluntario():
         codigo_rfid = request.form.get("codigo_rfid") or None
 
         Voluntario.save_voluntario(pessoa_id=pessoa_id, codigo_rfid=codigo_rfid)
-        flash("Voluntário cadastrado com sucesso!")
+        #flash("Voluntário cadastrado com sucesso!")
         return redirect("/voluntarios")
 
     pessoas_disponiveis = Pessoa.query.filter(Pessoa.voluntario == None).all()
@@ -39,15 +39,15 @@ def associar_funcao():
         funcao = Funcao.query.get(funcao_id)
 
         if not voluntario or not funcao:
-            flash("Voluntário ou função inválidos.")
+            #flash("Voluntário ou função inválidos.")
             return redirect("/associar_funcao")
 
         if funcao not in voluntario.funcoes:
             voluntario.funcoes.append(funcao)
             db.session.commit()
-            flash(f"Função '{funcao.nome}' associada ao voluntário '{voluntario.pessoa.nome}'.")
-        else:
-            flash("O voluntário já possui esta função.")
+            #flash(f"Função '{funcao.nome}' associada ao voluntário '{voluntario.pessoa.nome}'.")
+        #else:
+            #flash("O voluntário já possui esta função.")
 
         return redirect("/associar_funcao")
 
@@ -69,7 +69,7 @@ def editar_voluntario(voluntario_id):
         voluntario.funcoes = [Funcao.query.get(f) for f in funcoes_selecionadas if Funcao.query.get(f)]
 
         db.session.commit()
-        flash("Voluntário atualizado com sucesso!")
+        #flash("Voluntário atualizado com sucesso!")
         return redirect("/voluntarios")
 
     return render_template(
@@ -83,13 +83,13 @@ def editar_voluntario(voluntario_id):
 def deletar_voluntario(voluntario_id):
     voluntario = Voluntario.query.get(voluntario_id)
     if not voluntario:
-        flash("Voluntário não encontrado.")
+        #flash("Voluntário não encontrado.")
         return redirect("/voluntarios")
     
-    nome_voluntario = voluntario.pessoa.nome if voluntario.pessoa else "Desconhecido"
+    #nome_voluntario = voluntario.pessoa.nome if voluntario.pessoa else "Desconhecido"
 
     db.session.delete(voluntario)
     db.session.commit()
 
-    flash(f"Voluntário '{nome_voluntario}' deletado com sucesso!")
+    #flash(f"Voluntário '{nome_voluntario}' deletado com sucesso!")
     return redirect("/voluntarios")

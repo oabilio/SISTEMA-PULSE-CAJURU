@@ -11,6 +11,8 @@
         <option value="{{ pessoa.id }}">{{ pessoa.nome }}</option>
         {% endfor %}
       </select>
+      <a href="{{ url_for('pessoas.cadastrar_pessoa', next=request.path) }}" class="btn btn-secondary btn-sm">Criar nova pessoa</a>
+      <br><br>
     </div>
 
     <div class="mb-3">

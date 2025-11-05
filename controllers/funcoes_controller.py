@@ -20,11 +20,11 @@ def add_funcao():
     custo_hora = request.form.get("custo_hora") or 0.0
 
     if Funcao.buscar_funcao(nome):
-        flash("Função já existe!")
+        #flash("Função já existe!")
         return redirect(url_for('funcoes.cadastrar_funcao'))
 
     Funcao.save_funcao(nome=nome, descricao=descricao, custo_hora=custo_hora)
-    flash("Função cadastrada com sucesso!")
+    #flash("Função cadastrada com sucesso!")
     return redirect("/funcoes")
 
 @funcoes_bp.route('/edit_funcao')
@@ -44,7 +44,7 @@ def update_funcao():
         custo_hora=request.form.get('custo_hora')
     )
 
-    flash("Função atualizada com sucesso!")
+    #flash("Função atualizada com sucesso!")
     return redirect("/funcoes")
 
 @funcoes_bp.route('/deletar_funcao', methods=['GET'])
@@ -53,10 +53,10 @@ def deletar_funcao():
     funcao = Funcao.query.get(funcao_id)
 
     if funcao.voluntarios.count() > 0:
-        flash("Precisa remover os voluntários associados antes de deletar a função.")
+        #flash("Precisa remover os voluntários associados antes de deletar a função.")
         return redirect("/funcoes")
 
     db.session.delete(funcao)
     db.session.commit()
-    flash("Função deletada com sucesso!")
+    #flash("Função deletada com sucesso!")
     return redirect("/funcoes")
