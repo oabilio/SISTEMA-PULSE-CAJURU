@@ -12,9 +12,6 @@ class Voluntario(db.Model):
     data_entrada = db.Column(db.DateTime, default=func.now())
     status = db.Column(db.String(10), default="ativo")
 
-    rfid_pairing_code = db.Column(db.String(10), nullable=True)
-    rfid_pairing_expiry = db.Column(db.DateTime, nullable=True)
-
     @classmethod
     def save_voluntario(cls, pessoa_id, codigo_rfid=None, status="ativo"):
         voluntario = cls(pessoa_id=pessoa_id, codigo_rfid=codigo_rfid, status=status)
