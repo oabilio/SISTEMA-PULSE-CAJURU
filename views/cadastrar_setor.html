@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Setores{% endblock %}
+
+{% block header_title %}
+Cadastrar Setor
+{% endblock %}
+
+{% block content %}
+    <form action="/add_setor" method="post">
+        <label for="nome">Nome do Setor:</label><br>
+        <input type="text" name="nome" id="nome" required>
+        <br><br>
+
+        <label for="descricao">Descrição:</label><br>
+        <textarea name="descricao" id="descricao" rows="4" cols="50"></textarea>
+        <br><br>
+
+        <input type="submit" value="Cadastrar Setor">
+    </form>
+{% endblock %}

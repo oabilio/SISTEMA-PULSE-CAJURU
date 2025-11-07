@@ -8,3 +8,5 @@ from models.voluntarios.voluntario import Voluntario
 from models.voluntarios.funcao import Funcao
 from models.voluntarios.movimentacao import Movimentacao
 from models.voluntarios.ponto import Ponto
+from models.voluntarios.setor import Setor
+from models.voluntarios.registro_atividade import RegistroAtividade

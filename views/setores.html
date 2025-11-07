@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Setores{% endblock %}
+
+{% block header_title %}
+Lista de Setores
+{% endblock %}
+
+{% block content %}
+
+    <a href="/cadastrar_setor">Cadastrar Novo Setor</a>
+    <br><br>
+
+    {% if setores %}
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for setor in setores %}
+                <tr>
+                    <td>{{ setor.nome }}</td>
+                    <td>{{ setor.descricao or "-" }}</td>
+                    <td>
+                        <a href="/edit_setor?id={{ setor.id }}">Editar</a> |
+                        <a href="/deletar_setor?id={{ setor.id }}" onclick="return confirm('Deseja realmente deletar este setor?')">Deletar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum setor cadastrado.</p>
+    {% endif %}
+    
+{% endblock %}

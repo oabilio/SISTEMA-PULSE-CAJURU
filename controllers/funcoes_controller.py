@@ -31,7 +31,7 @@ def add_funcao():
 def edit_funcao():
     funcao_id = request.args.get('id')
     funcao = Funcao.query.get(funcao_id)
-    return render_template("update_funcao.html", funcao=funcao)
+    return render_template("editar_funcao.html", funcao=funcao)
 
 @funcoes_bp.route('/update_funcao', methods=['POST'])
 def update_funcao():

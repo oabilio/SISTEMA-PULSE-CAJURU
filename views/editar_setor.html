@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Setores{% endblock %}
+
+{% block header_title %}
+Editar Setor
+{% endblock %}
+
+{% block content %}
+    <form action="/update_setor" method="post">
+        <input type="hidden" name="id" value="{{ setor.id }}">
+
+        <label for="nome">Nome do Setor:</label><br>
+        <input type="text" name="nome" id="nome" value="{{ setor.nome }}" required>
+        <br><br>
+
+        <label for="descricao">Descrição:</label><br>
+        <textarea name="descricao" id="descricao" rows="4" cols="50">{{ setor.descricao }}</textarea>
+        <br><br>
+
+        <input type="submit" value="Atualizar Setor">
+    </form>
+{% endblock %}
