@@ -4,9 +4,9 @@ from models.user.pessoa import Pessoa
 from models.voluntarios.voluntario import Voluntario
 from models.voluntarios.atividade import Atividade
 from models.db import db
+from sqlalchemy.exc import IntegrityError
 import paho.mqtt.publish as publish
 import json
-from sqlalchemy.exc import IntegrityError
 
 MQTT_BROKER = "broker.mqttdashboard.com"
 MQTT_TOPIC_COMMAND = "pulse/system/command"
@@ -24,7 +24,7 @@ def voluntarios():
 def cadastrar_voluntario():
     if request.method == "POST":
         pessoa_id = request.form.get("pessoa_id")
-
+        
         vol = Voluntario.save_voluntario(pessoa_id=pessoa_id, codigo_rfid=None)
         
         flash("Voluntário cadastrado! Agora, associe um RFID.", "success")
@@ -123,12 +123,27 @@ def deletar_voluntario(voluntario_id):
     nome_voluntario = voluntario.pessoa.nome if voluntario.pessoa else "Desconhecido"
 
     try:
-        voluntario.status = "inativo"
+        if voluntario.pontos:
+            flash(f"Não é possível deletar {nome_voluntario}. Ele(a) possui registros de ponto associados.", "error")
+            return redirect("/voluntarios")
+        
+        if voluntario.movimentacoes:
+            flash(f"Não é possível deletar {nome_voluntario}. Ele(a) possui movimentações associadas.", "error")
+            return redirect("/voluntarios")
+
+        voluntario.atividades = []
         db.session.commit()
-        flash(f"Voluntário '{nome_voluntario}' foi desativado com sucesso. Seu histórico de pontos foi mantido.", "success")
+        
+        db.session.delete(voluntario)
+        db.session.commit()
+
+        flash(f"Voluntário '{nome_voluntario}' deletado com sucesso!", "success")
     
+    except IntegrityError:
+        db.session.rollback()
+        flash(f"Erro de integridade: Não foi possível deletar {nome_voluntario}. Verifique se ele(a) não está associado(a) a um Usuário.", "error")
     except Exception as e:
         db.session.rollback()
-        flash(f"Erro inesperado ao desativar: {e}", "error")
+        flash(f"Erro inesperado ao deletar: {e}", "error")
             
     return redirect("/voluntarios")

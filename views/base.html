@@ -1,117 +1,121 @@
 <html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
 
-<head>
-    <title>{% block title %}{% endblock %}</title>
+        <script src="https://cdn.tailwindcss.com"></script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+            rel="stylesheet">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-        rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css">
 
-    
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f7f9fc;
-            font-weight: 500;
-        }
-    </style>
+        <style>
+            body {
+                font-family: 'Open Sans', sans-serif;
+                background-color: #f7f9fc;
+                font-weight: 500;
+            }
+        </style>
 
-</head>
+    </head>
 
-<body class="flex h-screen overflow-hidden">
+    <body class="flex h-screen overflow-hidden">
 
-    <div id="sidebar" class="flex flex-col w-72 bg-[#2d3753] text-white fixed h-full z-10 shadow-lg">
+        <div id="dynamic-flash-container" style="position: fixed; top: 1rem; right: 1rem; z-index: 100;"></div>
 
-        <div class="p-6 border-b border-white/10 flex items-center justify-center h-20">
-            <img src="../static/img/pulse.png" alt="Logo Pulse Gestão de Voluntariado" class="h-14">
-        </div>
+        <div id="sidebar" class="flex flex-col w-72 bg-[#2d3753] text-white fixed h-full z-10 shadow-lg">
 
-        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <div class="p-6 border-b border-white/10 flex items-center justify-center h-20">
+                <img src="{{ url_for('static', filename='img/pulse.png') }}" alt="Logo Pulse Gestão de Voluntariado"
+                    class="h-14">
+            </div>
 
-            {% set current_path = request.path %}
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
 
-            <a href="{{ url_for('home') }}"
-                class="flex items-center p-3 rounded-lg transition duration-200 
+                {% set current_path = request.path %}
+
+                <a href="{{ url_for('home') }}"
+                    class="flex items-center p-3 rounded-lg transition duration-200 
                {% if current_path == '/home' or current_path == '/' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                <i class="fa-solid fa-house w-5 h-5 mr-3"></i>
-                Dashboard
-            </a>
+                    <i class="fa-solid fa-house w-5 h-5 mr-3"></i>
+                    Dashboard
+                </a>
 
-            <a href="/voluntarios"
-                class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if current_path == '/voluntarios' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                <i class="fa-solid fa-users w-5 h-5 mr-3"></i>
-                Voluntários
-            </a>
+                <a href="{{ url_for('voluntarios.voluntarios') }}"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+                {% if '/voluntarios' in current_path or '/cadastrar_voluntario' in current_path or '/editar_voluntario' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-users w-5 h-5 mr-3"></i>
+                    Voluntários
+                </a>
 
-            <a href="/setores"
-                class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if current_path == '/setores' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                <i class="fa-solid fa-house-medical-flag w-5 h-5 mr-3"></i>
-                Setores
-            </a>
+                <a href="{{ url_for('setores.setores') }}"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+                {% if '/setores' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-house-medical-flag w-5 h-5 mr-3"></i>
+                    Setores
+                </a>
 
-            <a href="/ponto"
-                class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if current_path == '/ponto' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                <i class="fa-solid fa-clock w-5 h-5 mr-3"></i>
-                Registros de Ponto
-            </a>
+                <a href="{{ url_for('ponto.ponto') }}"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+                {% if '/ponto' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-clock w-5 h-5 mr-3"></i>
+                    Registros de Ponto
+                </a>
 
-            <a href="/movimentacoes"
-                class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+                <a href="/movimentacoes"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
                 {% if current_path == '/movimentacoes' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                <i class="fa-solid fa-route w-5 h-5 mr-3"></i>
-                Movimentações
-            </a>
+                    <i class="fa-solid fa-route w-5 h-5 mr-3"></i>
+                    Movimentações
+                </a>
 
-            <a href="/atividades"
-                class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if current_path == '/atividades' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                <i class="fa-solid fa-clipboard-user w-5 h-5 mr-3"></i>
-                Atividades
-            </a>
+                <a href="{{ url_for('atividades.atividades') }}"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+                {% if '/atividades' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-clipboard-user w-5 h-5 mr-3"></i>
+                    Atividades
+                </a>
 
-            {% if current_user.is_authenticated and current_user.has_role('admin') %}
-                <a href="/usuarios"
+                {% if current_user.is_authenticated and current_user.has_role('admin') %}
+                <a href="{{ url_for('usuarios_bp.usuarios') }}"
                     class="flex items-center p-3 rounded-lg transition duration-200 text-gray-300 hover:bg-[#394263] hover:text-white
-                    {% if current_path == '/usuarios' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    {% if '/usuarios' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                     <i class="fa-solid fa-user-gear w-5 h-5 mr-3"></i>
                     Usuários
                 </a>
-            {% endif %}
+                {% endif %}
 
-        </nav>
+            </nav>
 
-        <div class="p-4 border-t border-white/10">
-            {% if current_user.is_authenticated %}
-            <div class="flex items-center text-base">
-                <span class="truncate"><i class="fa-solid fa-user mr-1"></i> Olá, {{ current_user.login }}</span>
+            <div class="p-4 border-t border-white/10">
+                {% if current_user.is_authenticated %}
+                <div class="flex items-center text-base">
+                    <span class="truncate"><i class="fa-solid fa-user mr-1"></i> Olá, {{ current_user.login }}</span>
+                </div>
+                <a href="{{ url_for('login.logout') }}" class="text-base text-red-400 hover:text-red-300 mt-2 block">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Sair
+                </a>
+                {% endif %}
             </div>
-            <a href="{{ url_for('login.logout') }}" class="text-base text-red-400 hover:text-red-300 mt-2 block">
-                <i class="fa-solid fa-right-from-bracket mr-1"></i> Sair
-            </a>
-            {% endif %}
+
         </div>
 
-    </div>
+        <div id="main-content" class="flex-1 flex flex-col overflow-y-auto ml-72">
 
-    <div id="main-content" class="flex-1 flex flex-col overflow-y-auto ml-72">
-        
-        <header class="bg-white shadow-sm p-4 h-20 flex items-center border-b border-gray-200">
-            <h1 class="text-xl font-semibold text-gray-800">{% block header_title %}{% endblock %}</h1>
-        </header>
+            <header class="bg-white shadow-sm p-4 h-20 flex items-center border-b border-gray-200">
+                <h1 class="text-xl font-semibold text-gray-800">{% block header_title %}{% endblock %}</h1>
+            </header>
 
-        <main class="flex-1 p-6">
-            {% block content %}{% endblock %}
-        </main>
-    </div>
+            <main class="flex-1 p-6">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
 
-</body>
+        <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </body>
 
 </html>

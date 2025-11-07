@@ -47,7 +47,6 @@ Registros de Ponto
                 <td class="px-6 py-4">{{ ponto.entrada.strftime('%d/%m/%Y %H:%M') }}</td>
                 <td class="px-6 py-4">{{ ponto.origem or '-' }}</td>
                 <td class="px-6 py-4">
-
                     <form action="{{ url_for('ponto.registrar_saida', ponto_id=ponto.id) }}" method="POST"
                         class="inline">
                         <button type="submit" class="font-medium text-red-600 hover:underline"
@@ -55,12 +54,10 @@ Registros de Ponto
                             Fechar Agora
                         </button>
                     </form>
-
                     <a href="{{ url_for('ponto.editar_ponto', ponto_id=ponto.id) }}"
                         class="font-medium text-blue-600 hover:underline ml-3">
                         Escolher Horário
                     </a>
-
                 </td>
             </tr>
             {% endfor %}
@@ -81,7 +78,7 @@ Registros de Ponto
                 <th scope="col" class="px-6 py-3">Entrada</th>
                 <th scope="col" class="px-6 py-3">Saída</th>
                 <th scope="col" class="px-6 py-3">Atividade</th>
-                <th scope="col" class."px-6 py-3">Duração</th>
+                <th scope="col" class="px-6 py-3">Duração</th>
                 <th scope="col" class="px-6 py-3">Origem</th>
                 <th scope="col" class="px-6 py-3 text-center">Ações</th>
             </tr>
@@ -134,9 +131,4 @@ Registros de Ponto
     <p class="text-gray-500">Nenhum registro de ponto fechado encontrado.</p>
     {% endif %}
 </div>
-<script>
-    setTimeout(() => {
-        document.querySelectorAll('.flash-message').forEach(el => el.remove());
-    }, 5000);
-</script>
 {% endblock %}

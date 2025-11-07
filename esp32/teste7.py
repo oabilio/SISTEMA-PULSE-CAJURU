@@ -60,10 +60,29 @@ print("Conectado à rede Wi-Fi:", WIFI_SSID)
 
 client = MQTTClient(MQTT_CLIENT_ID, MQTT_BROKER)
 client.set_callback(callback)
-client.connect()
-client.subscribe(MQTT_TOPIC_SUBSCRIBE)
-client.subscribe(MQTT_TOPIC_COMMAND)
-print("Conectado ao MQTT e escutando tópicos.")
+
+# --- INÍCIO DA NOVA LÓGICA DE CONEXÃO ---
+def connect_and_subscribe():
+    print("Conectando ao MQTT...")
+    while True:
+        try:
+            client.connect()
+            client.subscribe(MQTT_TOPIC_SUBSCRIBE)
+            client.subscribe(MQTT_TOPIC_COMMAND)
+            print("Conectado ao MQTT e escutando tópicos.")
+            lcd.clear()
+            lcd.putstr("CONECTADO")
+            time.sleep(1)
+            show_mode_select_screen()
+            return
+        except OSError as e:
+            print(f"Falha ao conectar: {e}")
+            lcd.clear()
+            lcd.putstr("ERRO DE REDE")
+            lcd.move_to(0, 1)
+            lcd.putstr("Tentando em 5s..")
+            time.sleep(5)
+# --- FIM DA NOVA LÓGICA DE CONEXÃO ---
 
 buzzer = Pin(2, Pin.OUT)
 
@@ -127,9 +146,9 @@ def send_and_wait(payload_dict, wait_text="ENVIANDO..."):
     
     try:
         client.publish(MQTT_TOPIC_PUBLISH, json.dumps(payload_dict))
-    except Exception as e:
-        print("[ESP] Erro ao publicar:", e)
-        lcd.clear(); lcd.putstr("ERRO MQTT"); lcd.move_to(0, 1); lcd.putstr("Tente novamente")
+    except OSError as e:
+        print(f"[ESP] Erro ao publicar: {e}")
+        lcd.clear(); lcd.putstr("ERRO DE REDE"); lcd.move_to(0, 1); lcd.putstr("Falha ao enviar")
         play_sound(False); time.sleep(2)
         return None
 
@@ -137,7 +156,14 @@ def send_and_wait(payload_dict, wait_text="ENVIANDO..."):
     
     start_time = time.time()
     while time.time() - start_time < 5:
-        client.check_msg()
+        try:
+            client.check_msg()
+        except OSError as e:
+            print(f"[ESP] Erro no check_msg (wait): {e}")
+            lcd.clear(); lcd.putstr("ERRO DE REDE"); lcd.move_to(0, 1); lcd.putstr("Conexao perdida")
+            play_sound(False); time.sleep(2)
+            return None 
+            
         if last_msg:
             lcd.clear(); lcd.move_to(0, 0); lcd.putstr(last_msg.get('status', 'erro').upper())
             lcd.move_to(0, 1); lcd.putstr(last_msg.get('msg', 'Erro')[:16])
@@ -171,10 +197,17 @@ def show_mode_select_screen():
     lcd.move_to(0, 1)
     lcd.putstr("                ")
 
-show_mode_select_screen()
+connect_and_subscribe()
 
 while True:
-    client.check_msg()
+    try:
+        client.check_msg()
+    except OSError as e:
+        print(f"Erro no check_msg principal: {e}")
+        connect_and_subscribe()
+        continue
+    
+    key = keypad.scan() 
     
     if current_state == "REGISTER_TAG_1":
         card_id = read_rfid_tag()
@@ -192,7 +225,6 @@ while True:
             else:
                 show_mode_select_screen()
         
-        key = keypad.scan()
         if key == '*':
             show_mode_select_screen()
 
@@ -207,12 +239,10 @@ while True:
             send_and_wait(payload, "Confirmando...")
             show_mode_select_screen()
         
-        key = keypad.scan()
         if key == '*':
             show_mode_select_screen()
 
     elif current_state == "MODE_SELECT":
-        key = keypad.scan()
         if key == '1':
             current_state = "RFID_SCAN"
             lcd.clear(); lcd.putstr("BATER PONTO:"); lcd.move_to(0, 1); lcd.putstr("APROXIME A TAG")
@@ -222,7 +252,6 @@ while True:
             lcd.clear(); lcd.putstr("PONTO POR CPF:"); lcd.move_to(0, 1); lcd.putstr("                ")
 
     elif current_state == "CPF_ENTRY":
-        key = keypad.scan()
         if key:
             if key == '#': 
                 if len(input_buffer) > 0:
@@ -236,7 +265,6 @@ while True:
                 lcd.move_to(0, 1); lcd.putstr("*" * len(input_buffer)) 
 
     elif current_state == "RFID_SCAN":
-        key = keypad.scan()
         if key == '*':
             show_mode_select_screen()
         
