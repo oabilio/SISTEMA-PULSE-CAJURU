@@ -8,6 +8,7 @@ from controllers.atividades_controller import atividades_bp
 from controllers.usuarios_controller import usuarios_bp
 from controllers.ponto_controller import ponto_bp
 from controllers.setores_controller import setores_bp
+from controllers.movimentacoes_controller import movimentacoes_bp
 from models.db import db, instance
 from models.user.usuarios import Usuario
 
@@ -36,6 +37,7 @@ def create_app():
     app.register_blueprint(usuarios_bp, url_prefix='/')
     app.register_blueprint(ponto_bp, url_prefix="/")
     app.register_blueprint(setores_bp, url_prefix="/")
+    app.register_blueprint(movimentacoes_bp, url_prefix="/")
 
     @login_manager.user_loader
     def load_user(user_id):
