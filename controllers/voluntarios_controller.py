@@ -1,34 +1,23 @@
-# controllers/voluntarios_controller.py
 from flask import Blueprint, request, render_template, redirect, flash, url_for
 from flask_login import login_required
 from models.user.pessoa import Pessoa
 from models.voluntarios.voluntario import Voluntario
 from models.voluntarios.atividade import Atividade
-from models.voluntarios.ponto import Ponto
 from models.db import db
-import paho.mqtt.publish as publish # Importe a biblioteca MQTT
+import paho.mqtt.publish as publish
 import json
+from sqlalchemy.exc import IntegrityError
 
-# --- Configuração do Broker MQTT (para o Flask publicar) ---
 MQTT_BROKER = "broker.mqttdashboard.com"
-MQTT_TOPIC_COMMAND = "pulse/system/command" # Novo tópico de comando
-# --- Fim da Configuração ---
+MQTT_TOPIC_COMMAND = "pulse/system/command"
 
 voluntarios_bp = Blueprint("voluntarios", __name__, template_folder="../views")
 
 @voluntarios_bp.route('/voluntarios')
 @login_required
 def voluntarios():
-    todos_voluntarios = Voluntario.query.order_by(Voluntario.pessoa_id).all()
-    
-    pontos_abertos = Ponto.get_pontos_abertos()
-    voluntarios_ativos = [p.voluntario for p in pontos_abertos]
-
-    return render_template(
-        "voluntarios.html", 
-        voluntarios=todos_voluntarios,
-        voluntarios_ativos=voluntarios_ativos
-    )
+    voluntarios_ativos = Voluntario.query.all()
+    return render_template("voluntarios.html", voluntarios=voluntarios_ativos)
 
 @voluntarios_bp.route('/cadastrar_voluntario', methods=['GET', 'POST'])
 @login_required
@@ -36,11 +25,9 @@ def cadastrar_voluntario():
     if request.method == "POST":
         pessoa_id = request.form.get("pessoa_id")
 
-        # Lógica de RFID removida daqui
         vol = Voluntario.save_voluntario(pessoa_id=pessoa_id, codigo_rfid=None)
         
         flash("Voluntário cadastrado! Agora, associe um RFID.", "success")
-        # Redireciona para a página de edição para registrar o RFID
         return redirect(url_for('voluntarios.editar_voluntario', voluntario_id=vol.id))
 
     pessoas_disponiveis = Pessoa.query.filter(Pessoa.voluntario == None).all()
@@ -78,7 +65,6 @@ def editar_voluntario(voluntario_id):
     atividades_disponiveis = Atividade.query.filter_by(ativo=True).all()
 
     if request.method == 'POST':
-        # A lógica de salvar 'codigo_rfid' é removida daqui
         voluntario.status = request.form.get('status') or voluntario.status
         atividades_selecionadas = request.form.getlist('atividades')
         voluntario.atividades = [Atividade.query.get(f) for f in atividades_selecionadas if Atividade.query.get(f)]
@@ -93,7 +79,6 @@ def editar_voluntario(voluntario_id):
         atividades_disponiveis=atividades_disponiveis
     )
 
-# --- ROTA DE 'ATRIBUIR RFID' ATUALIZADA ---
 @voluntarios_bp.route('/voluntario/<int:voluntario_id>/start_rfid_register', methods=['POST'])
 @login_required
 def start_rfid_register(voluntario_id):
@@ -104,14 +89,12 @@ def start_rfid_register(voluntario_id):
          return redirect(url_for('voluntarios.editar_voluntario', voluntario_id=voluntario.id))
          
     try:
-        # Prepara a mensagem de comando para o ESP32
         payload = {
             "command": "start_registration",
             "voluntario_id": voluntario.id,
             "nome_voluntario": voluntario.pessoa.nome.split()[0]
         }
         
-        # Publica a mensagem no tópico de comando
         publish.single(MQTT_TOPIC_COMMAND, json.dumps(payload), hostname=MQTT_BROKER)
         
         flash(f"Comando enviado ao leitor! Por favor, aproxime a tag 2x...", "success")
@@ -120,7 +103,6 @@ def start_rfid_register(voluntario_id):
 
     return redirect(url_for('voluntarios.editar_voluntario', voluntario_id=voluntario.id))
 
-# --- NOVA ROTA PARA LIMPAR O RFID ---
 @voluntarios_bp.route('/voluntario/<int:voluntario_id>/limpar_rfid', methods=['POST'])
 @login_required
 def limpar_rfid(voluntario_id):
@@ -130,7 +112,7 @@ def limpar_rfid(voluntario_id):
     flash("Código RFID removido. Agora você pode registrar um novo.", "success")
     return redirect(url_for('voluntarios.editar_voluntario', voluntario_id=voluntario.id))
 
-@voluntarios_bp.route('/deletar_voluntario/<int:voluntario_id>', methods=['GET'])
+@voluntarios_bp.route('/deletar_voluntario/<int:voluntario_id>', methods=['POST'])
 @login_required
 def deletar_voluntario(voluntario_id):
     voluntario = Voluntario.query.get(voluntario_id)
@@ -139,8 +121,14 @@ def deletar_voluntario(voluntario_id):
         return redirect("/voluntarios")
     
     nome_voluntario = voluntario.pessoa.nome if voluntario.pessoa else "Desconhecido"
-    db.session.delete(voluntario)
-    db.session.commit()
 
-    flash(f"Voluntário '{nome_voluntario}' deletado com sucesso!", "success")
+    try:
+        voluntario.status = "inativo"
+        db.session.commit()
+        flash(f"Voluntário '{nome_voluntario}' foi desativado com sucesso. Seu histórico de pontos foi mantido.", "success")
+    
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Erro inesperado ao desativar: {e}", "error")
+            
     return redirect("/voluntarios")

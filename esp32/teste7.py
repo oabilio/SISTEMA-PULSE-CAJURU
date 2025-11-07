@@ -12,15 +12,13 @@ MQTT_CLIENT_ID = "esp32_samuel_20082025"
 MQTT_BROKER = "broker.mqttdashboard.com"
 MQTT_TOPIC_PUBLISH = "exp.criativas/samuel/pcparaesp"
 MQTT_TOPIC_SUBSCRIBE = "exp.criativas/samuel/espparapc"
-MQTT_TOPIC_COMMAND = "pulse/system/command" # Novo tópico para comandos da Web
+MQTT_TOPIC_COMMAND = "pulse/system/command"
 WIFI_SSID = "Visitantes"
 WIFI_PASSWORD = ""
 
-# --- Variáveis de Estado Globais ---
 current_state = "MODE_SELECT"
 input_buffer = ""
-current_voluntario_id = None # Armazena o ID do voluntário vindo do comando
-# --- Fim das Globais ---
+current_voluntario_id = None
 
 def callback(topic_bytes, msg_bytes):
     global last_msg, current_state, current_voluntario_id
@@ -29,12 +27,10 @@ def callback(topic_bytes, msg_bytes):
     
     try:
         if topic == MQTT_TOPIC_SUBSCRIBE:
-            # Respostas do servidor (OK, Erro, etc.)
             last_msg = json.loads(msg_bytes.decode())
             print("[ESP] Resposta Servidor:", last_msg)
             
         elif topic == MQTT_TOPIC_COMMAND:
-            # Novo comando vindo da Web
             print("[ESP] Comando Recebido:", msg_bytes.decode())
             data = json.loads(msg_bytes.decode())
             
@@ -43,7 +39,6 @@ def callback(topic_bytes, msg_bytes):
                 nome = data.get("nome_voluntario", "Voluntario")
                 
                 if current_voluntario_id:
-                    # Força a mudança de estado
                     current_state = "REGISTER_TAG_1"
                     lcd.clear()
                     lcd.putstr(f"Registrar {nome}")
@@ -67,7 +62,7 @@ client = MQTTClient(MQTT_CLIENT_ID, MQTT_BROKER)
 client.set_callback(callback)
 client.connect()
 client.subscribe(MQTT_TOPIC_SUBSCRIBE)
-client.subscribe(MQTT_TOPIC_COMMAND) # Escuta o novo tópico
+client.subscribe(MQTT_TOPIC_COMMAND)
 print("Conectado ao MQTT e escutando tópicos.")
 
 buzzer = Pin(2, Pin.OUT)
@@ -181,8 +176,6 @@ show_mode_select_screen()
 while True:
     client.check_msg()
     
-    # A lógica de registro é prioritária e interrompe o menu
-    
     if current_state == "REGISTER_TAG_1":
         card_id = read_rfid_tag()
         if card_id:
@@ -199,7 +192,6 @@ while True:
             else:
                 show_mode_select_screen()
         
-        # Permite cancelar o registro com '*'
         key = keypad.scan()
         if key == '*':
             show_mode_select_screen()
@@ -219,7 +211,6 @@ while True:
         if key == '*':
             show_mode_select_screen()
 
-    # O código abaixo só é executado se NÃO estiver em modo de registro
     elif current_state == "MODE_SELECT":
         key = keypad.scan()
         if key == '1':

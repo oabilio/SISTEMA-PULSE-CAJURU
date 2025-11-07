@@ -1,4 +1,3 @@
-# run_mqtt.py
 import paho.mqtt.client as mqtt
 import time
 import json
@@ -19,8 +18,6 @@ MQTT_CLIENT_ID = "flask_server_samuel_20082025"
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
-# Armazena a primeira tag lida, associada ao ID do voluntário
-# Estrutura: { 5: "0xTagLida1" } (onde 5 é o voluntario_id)
 PENDING_REGISTRATIONS = {}
 
 def send_response(client, status, msg, rfid=None):
@@ -62,10 +59,7 @@ def handle_log_cpf(client, cpf):
     else:
         send_response(client, "erro", "CPF nao cadast.", cpf)
 
-# --- Lógica de Registro Atualizada ---
-
 def handle_register_tag_1(client, voluntario_id, rfid):
-    """ Recebe a primeira leitura de tag para um voluntário. """
     voluntario = Voluntario.query.get(voluntario_id)
     if not voluntario:
         send_response(client, "erro", "Volunt. Invalido", str(voluntario_id))
@@ -81,7 +75,6 @@ def handle_register_tag_1(client, voluntario_id, rfid):
     send_response(client, "ok", "Tag 1 OK", rfid)
 
 def handle_register_tag_2(client, voluntario_id, rfid):
-    """ Recebe a segunda leitura de tag e finaliza o registro. """
     voluntario = Voluntario.query.get(voluntario_id)
     first_tag = PENDING_REGISTRATIONS.get(voluntario_id)
     
@@ -105,8 +98,6 @@ def handle_register_tag_2(client, voluntario_id, rfid):
     PENDING_REGISTRATIONS.pop(voluntario_id, None)
 
 def on_message(client, userdata, message):
-    """Callback principal. Usa um NOVO app_context para CADA mensagem."""
-    
     app = userdata['app']
     
     with app.app_context():

@@ -12,7 +12,7 @@ Editar Voluntário
 {% if messages %}
 <div style="margin-bottom: 1rem;">
     {% for category, message in messages %}
-    <div style="padding: 1rem; border-radius: 0.5rem; border: 1px solid;""
+    <div style="padding: 1rem; border-radius: 0.5rem; border: 1px solid;"
         {% if category == 'error' %}
             background-color: #fef2f2; color: #b91c1c; border-color: #fecaca;
         {% elif category == 'success' %}
@@ -26,6 +26,7 @@ Editar Voluntário
 </div>
 {% endif %}
 {% endwith %}
+
 
 <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Voluntário: {{ voluntario.pessoa.nome }}</h2>
 
