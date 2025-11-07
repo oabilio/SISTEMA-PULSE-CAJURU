@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Cadastrar Movimentação{% endblock %}
+
+{% block header_title %}
+Cadastrar Movimentação
+{% endblock %}
+
+{% block content %}
+<form action="/add_movimentacao" method="post">
+    <label for="solicitante">Solicitante:</label><br>
+    <input type="text" name="solicitante" id="solicitante">
+    <br><br>
+
+    <label for="paciente">Paciente:</label><br>
+    <input type="text" name="paciente" id="paciente">
+    <br><br>
+
+    <label for="id_voluntario">Voluntário:</label><br>
+    <select name="id_voluntario" id="id_voluntario" required>
+        <option value="">Selecione um voluntário</option>
+        {% for v in voluntarios %}
+            <option value="{{ v.id }}">{{ v.pessoa.nome }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="origem_id">Setor de Origem:</label><br>
+    <select name="origem_id" id="origem_id" required>
+        <option value="">Selecione o setor de origem</option>
+        {% for s in setores %}
+            <option value="{{ s.id }}">{{ s.nome }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="destino_id">Setor de Destino:</label><br>
+    <select name="destino_id" id="destino_id" required>
+        <option value="">Selecione o setor de destino</option>
+        {% for s in setores %}
+            <option value="{{ s.id }}">{{ s.nome }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <input type="submit" value="Registrar Movimentação">
+</form>
+{% endblock %}

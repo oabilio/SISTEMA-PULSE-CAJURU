@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Movimentações{% endblock %}
+
+{% block header_title %}
+Lista de Movimentações
+{% endblock %}
+
+{% block content %}
+<a href="/cadastrar_movimentacao">Registrar Nova Movimentação</a>
+<br><br>
+
+{% if movimentacoes %}
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Solicitante</th>
+            <th>Paciente</th>
+            <th>Voluntário</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for mov in movimentacoes %}
+        <tr>
+            <td>{{ mov.solicitante or "-" }}</td>
+            <td>{{ mov.paciente or "-" }}</td>
+            <td>{{ mov.voluntario.pessoa.nome if mov.voluntario else "-" }}</td>
+            <td>{{ mov.origem.nome if mov.origem else "-" }}</td>
+            <td>{{ mov.destino.nome if mov.destino else "-" }}</td>
+            <td>{{ mov.data.strftime('%d/%m/%Y %H:%M') if mov.data else "-" }}</td>
+            <td>
+                <a href="/editar_movimentacao?id={{ mov.id }}">Editar</a> |
+                <a href="/deletar_movimentacao?id={{ mov.id }}" onclick="return confirm('Deseja realmente deletar esta movimentação?')">Deletar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Nenhuma movimentação registrada.</p>
+{% endif %}
+{% endblock %}

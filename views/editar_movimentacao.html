@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Editar Movimentação{% endblock %}
+
+{% block header_title %}
+Editar Movimentação
+{% endblock %}
+
+{% block content %}
+<form action="/update_movimentacao" method="post">
+    <input type="hidden" name="id" value="{{ movimentacao.id }}">
+
+    <label for="solicitante">Solicitante:</label><br>
+    <input type="text" name="solicitante" id="solicitante" value="{{ movimentacao.solicitante }}">
+    <br><br>
+
+    <label for="paciente">Paciente:</label><br>
+    <input type="text" name="paciente" id="paciente" value="{{ movimentacao.paciente }}">
+    <br><br>
+
+    <label for="id_voluntario">Voluntário:</label><br>
+    <select name="id_voluntario" id="id_voluntario" required>
+        {% for v in voluntarios %}
+            <option value="{{ v.id }}" {% if movimentacao.id_voluntario == v.id %}selected{% endif %}>
+                {{ v.pessoa.nome }}
+            </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="origem_id">Setor de Origem:</label><br>
+    <select name="origem_id" id="origem_id" required>
+        {% for s in setores %}
+            <option value="{{ s.id }}" {% if movimentacao.origem_id == s.id %}selected{% endif %}>{{ s.nome }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="destino_id">Setor de Destino:</label><br>
+    <select name="destino_id" id="destino_id" required>
+        {% for s in setores %}
+            <option value="{{ s.id }}" {% if movimentacao.destino_id == s.id %}selected{% endif %}>{{ s.nome }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <input type="submit" value="Atualizar Movimentação">
+</form>
+{% endblock %}
