@@ -3,11 +3,11 @@
 {% block title %}SISTEMA PULSE | Voluntarios{% endblock %}
 
 {% block header_title %}
-Associar função a um voluntário
+Associar atividade a um voluntário
 {% endblock %}
 
 {% block content %}
-<form action="/associar_funcao" method="post">
+<form action="/associar_atividade" method="post">
     <label for="voluntario">Voluntário:</label><br>
     <select name="voluntario_id" id="voluntario" required>
         <option value="">-- Selecione --</option>
@@ -17,15 +17,15 @@ Associar função a um voluntário
     </select>
     <br><br>
 
-    <label for="funcao">Função:</label><br>
-    <select name="funcao_id" id="funcao" required>
+    <label for="atividade">Atividade:</label><br>
+    <select name="atividade_id" id="atividade" required>
         <option value="">-- Selecione --</option>
-        {% for funcao in funcoes %}
-        <option value="{{ funcao.id }}">{{ funcao.nome }}</option>
+        {% for atividade in atividades %}
+        <option value="{{ atividade.id }}">{{ atividade.nome }}</option>
         {% endfor %}
     </select>
     <br><br>
 
-    <input type="submit" value="Associar Função">
+    <input type="submit" value="Associar Atividade">
 </form>
 {% endblock %}

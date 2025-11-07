@@ -10,7 +10,7 @@ class RegistroAtividade(db.Model):
     criado_em = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
     ponto_id = db.Column(db.Integer, db.ForeignKey('ponto.id'), nullable=False)
-    funcao_id = db.Column(db.Integer, db.ForeignKey('funcao.id'), nullable=False)
+    atividade_id = db.Column(db.Integer, db.ForeignKey('atividade.id'), nullable=False)
 
     ponto = db.relationship('Ponto', backref='registro_atividade', lazy=True)
-    funcao = db.relationship('Funcao', backref='registro_atividade', lazy=True)
+    atividade = db.relationship('Atividade', backref='registro_atividade', lazy=True)

@@ -14,7 +14,7 @@ Lista de Voluntários
     <thead>
         <tr>
             <th>Nome do Voluntário</th>
-            <th>Funções</th>
+            <th>Atividade(s)</th>
             <th>Código RFID</th>
             <th>Data de Entrada</th>
             <th>Status</th>
@@ -26,8 +26,8 @@ Lista de Voluntários
         <tr>
             <td>{{ voluntario.pessoa.nome }}</td>
             <td>
-                {% if voluntario.funcoes|length > 0 %}
-                {{ voluntario.funcoes | map(attribute='nome') | join(', ') }}
+                {% if voluntario.atividades|length > 0 %}
+                {{ voluntario.atividades | map(attribute='nome') | join(', ') }}
                 {% else %}
                 Nenhuma
                 {% endif %}

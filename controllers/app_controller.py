@@ -4,7 +4,7 @@ from flask_login import LoginManager, login_required
 from controllers.login_controller import login_bp
 from controllers.pessoas_controller import pessoas_bp
 from controllers.voluntarios_controller import voluntarios_bp
-from controllers.funcoes_controller import funcoes_bp
+from controllers.atividades_controller import atividades_bp
 from controllers.usuarios_controller import usuarios_bp
 from controllers.ponto_controller import ponto_bp
 from controllers.setores_controller import setores_bp
@@ -31,7 +31,7 @@ def create_app():
 
     app.register_blueprint(login_bp, url_prefix='/')
     app.register_blueprint(pessoas_bp, url_prefix='/')
-    app.register_blueprint(funcoes_bp, url_prefix='/')
+    app.register_blueprint(atividades_bp, url_prefix='/')
     app.register_blueprint(voluntarios_bp, url_prefix='/')
     app.register_blueprint(usuarios_bp, url_prefix='/')
     app.register_blueprint(ponto_bp, url_prefix="/")

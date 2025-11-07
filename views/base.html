@@ -70,11 +70,11 @@
                 Registrar Movimentação
             </a>
 
-            <a href="/funcoes"
+            <a href="/atividades"
                 class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if current_path == '/funcoes' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                {% if current_path == '/atividades' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                 <i class="fa-solid fa-clipboard-user w-5 h-5 mr-3"></i>
-                Funções
+                Atividades
             </a>
 
             {% if current_user.is_authenticated and current_user.has_role('admin') %}

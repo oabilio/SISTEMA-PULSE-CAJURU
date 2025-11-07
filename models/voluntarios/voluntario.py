@@ -1,7 +1,7 @@
 # voluntario.py
 from models.db import db
 from sqlalchemy.sql import func
-from models.voluntarios.voluntario_funcao import voluntario_funcao_association
+from models.voluntarios.voluntario_atividade import voluntario_atividade_association
 
 class Voluntario(db.Model):
     __tablename__ = "voluntario"

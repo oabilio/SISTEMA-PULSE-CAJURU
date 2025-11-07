@@ -3,7 +3,7 @@ from flask import Blueprint, request, render_template, redirect, flash
 from flask_login import login_required
 from models.user.pessoa import Pessoa
 from models.voluntarios.voluntario import Voluntario
-from models.voluntarios.funcao import Funcao
+from models.voluntarios.atividade import Atividade
 from models.db import db
 
 voluntarios_bp = Blueprint("voluntarios", __name__, template_folder="../views")
@@ -28,45 +28,45 @@ def cadastrar_voluntario():
     pessoas_disponiveis = Pessoa.query.filter(Pessoa.voluntario == None).all()
     return render_template("cadastro_voluntario.html", pessoas=pessoas_disponiveis)
 
-@voluntarios_bp.route('/associar_funcao', methods=['GET', 'POST'])
+@voluntarios_bp.route('/associar_atividade', methods=['GET', 'POST'])
 @login_required
-def associar_funcao():
+def associar_atividade():
     if request.method == "POST":
         voluntario_id = request.form.get("voluntario_id")
-        funcao_id = request.form.get("funcao_id")
+        atividade_id = request.form.get("atividade_id")
 
         voluntario = Voluntario.query.get(voluntario_id)
-        funcao = Funcao.query.get(funcao_id)
+        atividade = Atividade.query.get(atividade_id)
 
-        if not voluntario or not funcao:
-            #flash("Voluntário ou função inválidos.")
-            return redirect("/associar_funcao")
+        if not voluntario or not atividade:
+            #flash("Voluntário ou atividade inválidos.")
+            return redirect("/associar_atividade")
 
-        if funcao not in voluntario.funcoes:
-            voluntario.funcoes.append(funcao)
+        if atividade not in voluntario.funcoes:
+            voluntario.atividades.append(atividade)
             db.session.commit()
             #flash(f"Função '{funcao.nome}' associada ao voluntário '{voluntario.pessoa.nome}'.")
         #else:
-            #flash("O voluntário já possui esta função.")
+            #flash("O voluntário já possui esta atividade.")
 
-        return redirect("/associar_funcao")
+        return redirect("/associar_atividade")
 
     voluntarios = Voluntario.query.filter_by(status="ativo").all()
-    funcoes = Funcao.query.filter_by(ativo=True).all()
-    return render_template("associar_funcao.html", voluntarios=voluntarios, funcoes=funcoes)
+    atividades = Atividade.query.filter_by(ativo=True).all()
+    return render_template("associar_atividade.html", voluntarios=voluntarios, atividades=atividades)
 
 @voluntarios_bp.route('/editar_voluntario/<int:voluntario_id>', methods=['GET', 'POST'])
 @login_required
 def editar_voluntario(voluntario_id):
     voluntario = Voluntario.query.get_or_404(voluntario_id)
-    funcoes_disponiveis = Funcao.query.filter_by(ativo=True).all()
+    atividades_disponiveis = Atividade.query.filter_by(ativo=True).all()
 
     if request.method == 'POST':
         voluntario.codigo_rfid = request.form.get('codigo_rfid') or voluntario.codigo_rfid
         voluntario.status = request.form.get('status') or voluntario.status
 
-        funcoes_selecionadas = request.form.getlist('funcoes')
-        voluntario.funcoes = [Funcao.query.get(f) for f in funcoes_selecionadas if Funcao.query.get(f)]
+        atividades_selecionadas = request.form.getlist('atividades')
+        voluntario.atividades = [Atividade.query.get(f) for f in atividades_selecionadas if Atividade.query.get(f)]
 
         db.session.commit()
         #flash("Voluntário atualizado com sucesso!")
@@ -75,7 +75,7 @@ def editar_voluntario(voluntario_id):
     return render_template(
         "editar_voluntario.html",
         voluntario=voluntario,
-        funcoes_disponiveis=funcoes_disponiveis
+        atividades_disponiveis=atividades_disponiveis
     )
 
 @voluntarios_bp.route('/deletar_voluntario/<int:voluntario_id>', methods=['GET'])

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Atividades{% endblock %}
+
+{% block header_title %}
+Lista de Atividades
+{% endblock %}
+
+{% block content %}
+
+    <a href="/cadastrar_atividade">Cadastrar Nova Atividade</a>
+    <br><br>
+
+    {% if atividades %}
+        <table border="1" cellpadding="5" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Custo/Hora</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for atividade in atividades %}
+                <tr>
+                    <td>{{ atividade.id }}</td>
+                    <td>{{ atividade.nome }}</td>
+                    <td>{{ atividade.descricao or "-" }}</td>
+                    <td>{{ atividade.custo_hora }}</td>
+                    <td>
+                        <a href="/edit_atividade?id={{ atividade.id }}">Editar</a> |
+                        <a href="/deletar_atividade?id={{ atividade.id }}" onclick="return confirm('Deseja realmente deletar esta atividade?')">Deletar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhuma atividade cadastrada.</p>
+    {% endif %}
+    
+{% endblock %}

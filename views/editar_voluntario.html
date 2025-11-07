@@ -24,12 +24,12 @@ Editar Voluntário
     </div>
 
     <div>
-        <label>Funções:</label>
+        <label>Atividades:</label>
         <div>
-            {% for funcao in funcoes_disponiveis %}
-                <input type="checkbox" name="funcoes" value="{{ funcao.id }}"
-                    {% if funcao in voluntario.funcoes %}checked{% endif %}>
-                {{ funcao.nome }}<br>
+            {% for atividade in atividades_disponiveis %}
+                <input type="checkbox" name="atividades" value="{{ atividade.id }}"
+                    {% if atividade in voluntario.atividades %}checked{% endif %}>
+                {{ atividade.nome }}<br>
             {% endfor %}
         </div>
     </div>
