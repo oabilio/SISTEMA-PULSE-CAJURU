@@ -60,32 +60,93 @@
 
                 <a href="{{ url_for('ponto.ponto') }}"
                     class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if '/ponto' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+           {% if '/ponto' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                     <i class="fa-solid fa-clock w-5 h-5 mr-3"></i>
                     Registros de Ponto
                 </a>
 
-                <a href="/movimentacoes"
-                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if current_path == '/movimentacoes' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                    <i class="fa-solid fa-route w-5 h-5 mr-3"></i>
-                    Movimentações
-                </a>
+            <a href="/voluntarios"
+                class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+           {% if current_path == '/voluntarios' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                <i class="fa-solid fa-users w-5 h-5 mr-3"></i>
+                Voluntários
+            </a>
+
+            <li class="flex flex-col">
+                {% set active_acomp = current_path in ['/setores', '/movimentacoes'] %}
+                <button type="button"
+                    class="flex items-center justify-between p-3 rounded-lg w-full text-gray-300 hover:bg-[#394263] hover:text-white"
+                    onclick="toggleDropdown(this)">
+                    <span class="flex items-center">
+                        <i class="fa-solid fa-route w-5 h-5 mr-3"></i>
+                        A. Solidário
+                    </span>
+                    <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                </button>
+
+                <div
+                    class="flex flex-col ml-6 mt-1 space-y-1 overflow-hidden max-h-0 transition-[max-height] duration-300 {% if active_acomp %}max-h-40{% endif %}">
+                    <a href="/setores"
+                        class="p-2 rounded-lg {% if current_path == '/setores' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                        Setores
+                    </a>
+                    <a href="/movimentacoes"
+                        class="p-2 rounded-lg {% if current_path == '/movimentacoes' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                        Nova Movimentação
+                    </a>
+                </div>
+            </li>
 
                 <a href="{{ url_for('atividades.atividades') }}"
                     class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if '/atividades' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+           {% if '/atividades' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                     <i class="fa-solid fa-clipboard-user w-5 h-5 mr-3"></i>
                     Atividades
                 </a>
 
+            <a href="/relatorios"
+                class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+           {% if current_path == '/relatorios' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                <i class="fa-solid fa-table w-5 h-5 mr-3"></i>
+                Relatórios
+            </a>
+
+            <a href="/documentacoes"
+                class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+           {% if current_path == '/documentacoes' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                <i class="fa-solid fa-file-contract w-5 h-5 mr-3"></i>
+                Documentações
+            </a>
+
                 {% if current_user.is_authenticated and current_user.has_role('admin') %}
-                <a href="{{ url_for('usuarios_bp.usuarios') }}"
-                    class="flex items-center p-3 rounded-lg transition duration-200 text-gray-300 hover:bg-[#394263] hover:text-white
-                    {% if '/usuarios' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                    <i class="fa-solid fa-user-gear w-5 h-5 mr-3"></i>
-                    Usuários
-                </a>
+            <li class="flex flex-col">
+                {% set active_admin = current_path in ['/pessoas', '/usuarios', '/logs'] %}
+                <button type="button"
+                    class="flex items-center justify-between p-3 rounded-lg w-full text-gray-300 hover:bg-[#394263] hover:text-white"
+                    onclick="toggleDropdown(this)">
+                    <span class="flex items-center">
+                        <i class="fa-solid fa-user-gear w-5 h-5 mr-3"></i>
+                        Admin
+                    </span>
+                    <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                </button>
+
+                <div
+                    class="flex flex-col ml-6 mt-1 space-y-1 overflow-hidden max-h-0 transition-[max-height] duration-300 {% if active_admin %}max-h-60{% endif %}">
+                    <a href="/pessoas"
+                        class="p-2 rounded-lg {% if current_path == '/pessoas' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                        Pessoas
+                    </a>
+                    <a href="{{ url_for('usuarios_bp.usuarios') }}"
+                        class="p-2 rounded-lg {% if '/usuarios' in current_path %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                        Usuários
+                    </a>
+                    <a href="/logs"
+                        class="p-2 rounded-lg {% if current_path == '/logs' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                        Logs de Sistema
+                    </a>
+                </div>
+            </li>
                 {% endif %}
 
             </nav>
@@ -113,6 +174,21 @@
                 {% block content %}{% endblock %}
             </main>
         </div>
+
+    <script>
+        function toggleDropdown(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i.fa-chevron-down');
+
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0';
+            } else {
+                content.style.maxHeight = '240px';
+            }
+
+            icon.classList.toggle('rotate-180');
+        }
+    </script>
 
         <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
