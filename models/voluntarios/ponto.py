@@ -16,7 +16,10 @@ class Ponto(db.Model):
         db.Integer, db.ForeignKey("voluntario.id"), nullable=False
     )
 
+    atividade_id = db.Column(db.Integer, db.ForeignKey("atividade.id"), nullable=True)
+
     voluntario = db.relationship("Voluntario", backref="pontos")
+    atividade = db.relationship("Atividade", backref="pontos")
 
     @property
     def duracao(self):

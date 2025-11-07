@@ -3,10 +3,10 @@ from flask_login import login_required
 from models.db import db
 from models.voluntarios.ponto import Ponto
 from models.voluntarios.voluntario import Voluntario
+from models.voluntarios.atividade import Atividade
 from datetime import datetime
 
 ponto_bp = Blueprint("ponto", __name__, template_folder="../views")
-
 
 @ponto_bp.route("/ponto")
 @login_required
@@ -14,10 +14,7 @@ def ponto():
     pontos_fechados = Ponto.get_pontos_fechados(limit=100)
     pontos_abertos = Ponto.get_pontos_abertos()
 
-    return render_template(
-        "ponto.html", pontos_fechados=pontos_fechados, pontos_abertos=pontos_abertos
-    )
-
+    return render_template("ponto.html", pontos_fechados=pontos_fechados, pontos_abertos=pontos_abertos)
 
 @ponto_bp.route("/ponto/registrar_saida/<int:ponto_id>", methods=["POST"])
 @login_required
@@ -78,7 +75,6 @@ def registrar_ponto_manual():
     voluntarios = Voluntario.query.filter_by(status="ativo").all()
     return render_template("registrar_ponto_manual.html", voluntarios=voluntarios)
 
-
 @ponto_bp.route("/ponto/editar/<int:ponto_id>", methods=["GET", "POST"])
 @login_required
 def editar_ponto(ponto_id):
@@ -87,16 +83,21 @@ def editar_ponto(ponto_id):
         flash("Registro de ponto não encontrado.", "error")
         return redirect(url_for("ponto.ponto"))
 
+    atividades = Atividade.query.filter_by(ativo=True).order_by(Atividade.nome).all()
+
     if request.method == "POST":
         try:
             entrada_str = request.form.get("entrada")
             saida_str = request.form.get("saida")
             observacao = request.form.get("observacao")
+            atividade_id = request.form.get("atividade_id")
 
             ponto.entrada = datetime.fromisoformat(entrada_str)
             ponto.saida = datetime.fromisoformat(saida_str) if saida_str else None
             ponto.observacao = observacao
             ponto.origem = "Manual (Editado)"
+
+            ponto.atividade_id = int(atividade_id) if atividade_id else None
 
             if ponto.saida and ponto.saida < ponto.entrada:
                 flash(
@@ -113,8 +114,7 @@ def editar_ponto(ponto_id):
             flash(f"Erro ao atualizar: {e}", "error")
             pass
 
-    return render_template("editar_ponto.html", ponto=ponto)
-
+    return render_template("editar_ponto.html", ponto=ponto, atividades=atividades)
 
 @ponto_bp.route("/ponto/deletar/<int:ponto_id>", methods=["POST"])
 @login_required
@@ -127,3 +127,25 @@ def deletar_ponto(ponto_id):
     else:
         flash("Registro de ponto não encontrado.", "error")
     return redirect(url_for("ponto.ponto"))
+
+@ponto_bp.route("/ponto/atribuir_atividade/<int:ponto_id>", methods=["GET", "POST"])
+@login_required
+def atribuir_atividade(ponto_id):
+    ponto = Ponto.query.get(ponto_id)
+    if not ponto:
+        flash("Registro de ponto não encontrado.", "error")
+        return redirect(url_for("ponto.ponto"))
+
+    atividades = Atividade.query.filter_by(ativo=True).all()
+
+    if request.method == "POST":
+        atividade_id = request.form.get("atividade_id")
+        if not atividade_id:
+            flash("Selecione uma atividade.", "error")
+        else:
+            ponto.atividade_id = int(atividade_id)
+            db.session.commit()
+            flash("Atividade atribuída com sucesso.", "success")
+            return redirect(url_for("ponto.ponto"))
+
+    return render_template("atribuir_atividade.html", ponto=ponto, atividades=atividades)

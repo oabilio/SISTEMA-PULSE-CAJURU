@@ -28,6 +28,20 @@
         </div>
 
         <div class="mb-4">
+            <label for="atividade_id" class="block mb-2 text-sm font-medium text-gray-900">Atividade:</label>
+            <select name="atividade_id" id="atividade_id"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                <option value="">-- Selecione uma atividade --</option>
+                {% for atividade in atividades %}
+                <option value="{{ atividade.id }}"
+                        {% if ponto.atividade and ponto.atividade.id == atividade.id %}selected{% endif %}>
+                    {{ atividade.nome }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-4">
             <label for="observacao" class="block mb-2 text-sm font-medium text-gray-900">Observação:</label>
             <textarea name="observacao" id="observacao" rows="3"
                       class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
