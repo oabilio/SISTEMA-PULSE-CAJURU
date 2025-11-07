@@ -1,35 +1,62 @@
 {% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Editar Usuário{% endblock %}
+
+{% block header_title %}
+Editar Usuário
+{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-  <h2>Editar Usuário</h2>
+<div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+    <h2 class="text-2xl font-semibold mb-6 text-indigo-700">{{ usuario.pessoa.nome }}</h2>
 
-  <form method="POST">
-    <div class="mb-3">
-      <label>Nome:</label>
-      <input type="text" class="form-control" value="{{ usuario.pessoa.nome }}" readonly>
-    </div>
+    <form method="POST" class="space-y-6">
 
-    <div class="mb-3">
-      <label>Login:</label>
-      <input type="text" class="form-control" name="login" value="{{ usuario.login }}" required>
-    </div>
+        <!-- Nome da Pessoa -->
+        <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900">Nome:</label>
+            <input type="text" value="{{ usuario.pessoa.nome }}" readonly
+                   class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+        </div>
 
-    <div class="mb-3">
-      <label>Nova Senha (opcional):</label>
-      <input type="password" class="form-control" name="senha" placeholder="Digite nova senha se quiser alterar">
-    </div>
+        <!-- Login -->
+        <div>
+            <label for="login" class="block mb-2 text-sm font-medium text-gray-900">Login:</label>
+            <input type="text" name="login" id="login" value="{{ usuario.login }}" required
+                   class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+        </div>
 
-    <div class="mb-3">
-      <label>Função:</label>
-      <select class="form-select" name="role_id" required>
-        {% for role in roles %}
-        <option value="{{ role.id }}" {% if role.id == usuario.role_id %}selected{% endif %}>{{ role.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
+        <!-- Senha -->
+        <div>
+            <label for="senha" class="block mb-2 text-sm font-medium text-gray-900">Nova Senha (opcional):</label>
+            <input type="password" name="senha" id="senha" placeholder="Digite nova senha se quiser alterar"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+        </div>
 
-    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-    <a href="{{ url_for('usuarios_bp.usuarios') }}" class="btn btn-secondary">Cancelar</a>
-  </form>
+        <!-- Função -->
+        <div>
+            <label for="role_id" class="block mb-2 text-sm font-medium text-gray-900">Função:</label>
+            <select name="role_id" id="role_id" required
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5">
+                {% for role in roles %}
+                <option value="{{ role.id }}" {% if role.id == usuario.role_id %}selected{% endif %}>
+                    {{ role.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex flex-col md:flex-row gap-4 mt-6">
+            <button type="submit"
+                    class="w-full md:w-auto text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 transition duration-200">
+                Salvar Alterações
+            </button>
+            <a href="{{ url_for('usuarios_bp.usuarios') }}"
+               class="w-full md:w-auto text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Cancelar
+            </a>
+        </div>
+    </form>
 </div>
 {% endblock %}

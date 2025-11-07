@@ -4,6 +4,7 @@ from flask_login import login_required
 from models.user.pessoa import Pessoa
 from models.voluntarios.voluntario import Voluntario
 from models.voluntarios.atividade import Atividade
+from models.voluntarios.ponto import Ponto
 from models.db import db
 
 voluntarios_bp = Blueprint("voluntarios", __name__, template_folder="../views")
@@ -11,8 +12,16 @@ voluntarios_bp = Blueprint("voluntarios", __name__, template_folder="../views")
 @voluntarios_bp.route('/voluntarios')
 @login_required
 def voluntarios():
-    voluntarios_ativos = Voluntario.query.all()
-    return render_template("voluntarios.html", voluntarios=voluntarios_ativos)
+    todos_voluntarios = Voluntario.query.order_by(Voluntario.pessoa_id).all()
+    
+    pontos_abertos = Ponto.get_pontos_abertos()
+    voluntarios_ativos = [p.voluntario for p in pontos_abertos]
+
+    return render_template(
+        "voluntarios.html", 
+        voluntarios=todos_voluntarios,
+        voluntarios_ativos=voluntarios_ativos
+    )
 
 @voluntarios_bp.route('/cadastrar_voluntario', methods=['GET', 'POST'])
 @login_required

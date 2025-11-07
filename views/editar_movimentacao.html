@@ -7,43 +7,72 @@ Editar Movimentação
 {% endblock %}
 
 {% block content %}
-<form action="/update_movimentacao" method="post">
-    <input type="hidden" name="id" value="{{ movimentacao.id }}">
+<div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-lg border border-gray-100">
 
-    <label for="solicitante">Solicitante:</label><br>
-    <input type="text" name="solicitante" id="solicitante" value="{{ movimentacao.solicitante }}">
-    <br><br>
+    <form action="/update_movimentacao" method="post" class="space-y-6">
+        <input type="hidden" name="id" value="{{ movimentacao.id }}">
 
-    <label for="paciente">Paciente:</label><br>
-    <input type="text" name="paciente" id="paciente" value="{{ movimentacao.paciente }}">
-    <br><br>
+        <!-- Solicitante -->
+        <div>
+            <label for="solicitante" class="block mb-2 text-sm font-medium text-gray-900">Solicitante:</label>
+            <input type="text" name="solicitante" id="solicitante" value="{{ movimentacao.solicitante }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+        </div>
 
-    <label for="id_voluntario">Voluntário:</label><br>
-    <select name="id_voluntario" id="id_voluntario" required>
-        {% for v in voluntarios %}
-            <option value="{{ v.id }}" {% if movimentacao.id_voluntario == v.id %}selected{% endif %}>
-                {{ v.pessoa.nome }}
-            </option>
-        {% endfor %}
-    </select>
-    <br><br>
+        <!-- Paciente -->
+        <div>
+            <label for="paciente" class="block mb-2 text-sm font-medium text-gray-900">Paciente:</label>
+            <input type="text" name="paciente" id="paciente" value="{{ movimentacao.paciente }}"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+        </div>
 
-    <label for="origem_id">Setor de Origem:</label><br>
-    <select name="origem_id" id="origem_id" required>
-        {% for s in setores %}
-            <option value="{{ s.id }}" {% if movimentacao.origem_id == s.id %}selected{% endif %}>{{ s.nome }}</option>
-        {% endfor %}
-    </select>
-    <br><br>
+        <!-- Voluntário -->
+        <div>
+            <label for="id_voluntario" class="block mb-2 text-sm font-medium text-gray-900">Voluntário:</label>
+            <select name="id_voluntario" id="id_voluntario" required
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                {% for v in voluntarios %}
+                    <option value="{{ v.id }}" {% if movimentacao.id_voluntario == v.id %}selected{% endif %}>
+                        {{ v.pessoa.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <label for="destino_id">Setor de Destino:</label><br>
-    <select name="destino_id" id="destino_id" required>
-        {% for s in setores %}
-            <option value="{{ s.id }}" {% if movimentacao.destino_id == s.id %}selected{% endif %}>{{ s.nome }}</option>
-        {% endfor %}
-    </select>
-    <br><br>
+        <!-- Setor de Origem -->
+        <div>
+            <label for="origem_id" class="block mb-2 text-sm font-medium text-gray-900">Setor de Origem:</label>
+            <select name="origem_id" id="origem_id" required
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                {% for s in setores %}
+                    <option value="{{ s.id }}" {% if movimentacao.origem_id == s.id %}selected{% endif %}>{{ s.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <input type="submit" value="Atualizar Movimentação">
-</form>
+        <!-- Setor de Destino -->
+        <div>
+            <label for="destino_id" class="block mb-2 text-sm font-medium text-gray-900">Setor de Destino:</label>
+            <select name="destino_id" id="destino_id" required
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                {% for s in setores %}
+                    <option value="{{ s.id }}" {% if movimentacao.destino_id == s.id %}selected{% endif %}>{{ s.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex items-center space-x-4 mt-6">
+            <button type="submit"
+                    class="w-full text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Atualizar Movimentação
+            </button>
+            <a href="{{ url_for('movimentacoes.movimentacoes') }}"
+               class="w-full text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Cancelar
+            </a>
+        </div>
+
+    </form>
+</div>
 {% endblock %}
