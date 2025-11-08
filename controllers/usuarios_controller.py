@@ -6,7 +6,7 @@ from models.user.roles import Role
 from models.user.pessoa import Pessoa
 from models.db import db
 
-usuarios_bp = Blueprint("usuarios_bp", __name__)
+usuarios_bp = Blueprint("usuarios", __name__, template_folder="../views")
 
 @usuarios_bp.route("/usuarios")
 @login_required

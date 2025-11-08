@@ -71,7 +71,7 @@ def editar_voluntario(voluntario_id):
 
         db.session.commit()
         flash("Voluntário atualizado com sucesso!", "success")
-        return redirect(url_for('voluntarios.editar_voluntario', voluntario_id=voluntario.id))
+        return redirect(url_for('voluntarios.voluntarios'))
 
     return render_template(
         "editar_voluntario.html",

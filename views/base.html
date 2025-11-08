@@ -44,13 +44,6 @@
                     Dashboard
                 </a>
 
-                <a href="{{ url_for('voluntarios.voluntarios') }}"
-                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
-                {% if '/voluntarios' in current_path or '/cadastrar_voluntario' in current_path or '/editar_voluntario' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
-                    <i class="fa-solid fa-users w-5 h-5 mr-3"></i>
-                    Voluntários
-                </a>
-
                 <a href="{{ url_for('ponto.ponto') }}"
                     class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
            {% if '/ponto' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
@@ -58,7 +51,7 @@
                     Registros de Ponto
                 </a>
 
-            <a href="/voluntarios"
+            <a href="{{ url_for('voluntarios.voluntarios') }}"
                 class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
            {% if current_path == '/voluntarios' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                 <i class="fa-solid fa-users w-5 h-5 mr-3"></i>
@@ -79,11 +72,11 @@
 
                 <div
                     class="flex flex-col ml-6 mt-1 space-y-1 overflow-hidden max-h-0 transition-[max-height] duration-300 {% if active_acomp %}max-h-40{% endif %}">
-                    <a href="/setores"
+                    <a href="{{url_for('setores.setores')}}"
                         class="p-2 rounded-lg {% if current_path == '/setores' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                         Setores
                     </a>
-                    <a href="/movimentacoes"
+                    <a href="{{url_for('movimentacoes.movimentacoes')}}"
                         class="p-2 rounded-lg {% if current_path == '/movimentacoes' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                         Nova Movimentação
                     </a>
@@ -126,11 +119,11 @@
 
                 <div
                     class="flex flex-col ml-6 mt-1 space-y-1 overflow-hidden max-h-0 transition-[max-height] duration-300 {% if active_admin %}max-h-60{% endif %}">
-                    <a href="/pessoas"
+                    <a href="{{ url_for('pessoas.pessoas') }}"
                         class="p-2 rounded-lg {% if current_path == '/pessoas' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                         Pessoas
                     </a>
-                    <a href="{{ url_for('usuarios_bp.usuarios') }}"
+                    <a href="{{ url_for('usuarios.usuarios') }}"
                         class="p-2 rounded-lg {% if '/usuarios' in current_path %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
                         Usuários
                     </a>

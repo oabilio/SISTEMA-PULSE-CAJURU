@@ -8,7 +8,7 @@ Lista de Pessoas
 
 {% block content %}
 <div class="mb-4">
-    <a href="{{ url_for('pessoas_bp.cadastrar_pessoa', next=request.path) }}"
+    <a href="{{ url_for('pessoas.cadastrar_pessoa', next=request.path) }}"
        class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
         + Nova Pessoa
     </a>
@@ -57,11 +57,11 @@ Lista de Pessoas
                 <td class="px-6 py-4">{{ pessoa.email }}</td>
                 <td class="px-6 py-4">{{ pessoa.criado_em.strftime('%d/%m/%Y %H:%M')}}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ url_for('pessoas_bp.editar_pessoa', id=pessoa.id) }}"
+                    <a href="{{ url_for('pessoas.editar_pessoa', id=pessoa.id) }}"
                        class="font-medium text-blue-600 hover:underline">
                         Editar
                     </a>
-                    <a href="{{ url_for('pessoas_bp.info_pessoa', id=pessoa.id) }}"
+                    <a href="{{ url_for('pessoas.info_pessoa', id=pessoa.id) }}"
                        class="font-medium text-gray-600 hover:underline ml-3">
                         Info
                     </a>

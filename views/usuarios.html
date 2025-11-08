@@ -8,7 +8,7 @@ Lista de Usuários
 
 {% block content %}
 <div class="mb-4">
-    <a href="{{ url_for('usuarios_bp.cadastrar_usuario') }}"
+    <a href="{{ url_for('usuarios.cadastrar_usuario') }}"
        class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
         + Novo Usuário
     </a>
@@ -57,12 +57,12 @@ Lista de Usuários
                 <td class="px-6 py-4">{{ usuario.role.name }}</td>
                 <td class="px-6 py-4">{{ usuario.status }}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ url_for('usuarios_bp.editar_usuario', usuario_id=usuario.id) }}"
+                    <a href="{{ url_for('usuarios.editar_usuario', usuario_id=usuario.id) }}"
                        class="font-medium text-blue-600 hover:underline">
                         Editar
                     </a>
                     {% if usuario.status == 'ativo' %}
-                    <a href="{{ url_for('usuarios_bp.deletar_usuario', usuario_id=usuario.id) }}"
+                    <a href="{{ url_for('usuarios.deletar_usuario', usuario_id=usuario.id) }}"
                        class="font-medium text-red-600 hover:underline ml-3"
                        onclick="return confirm('Deseja realmente desativar este usuário?')">
                         Desativar

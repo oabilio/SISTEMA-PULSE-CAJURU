@@ -5,7 +5,7 @@ from models.user.pessoa import Pessoa
 from datetime import datetime
 from models import db
 
-pessoas_bp = Blueprint("pessoas_bp", __name__, template_folder="../views")
+pessoas_bp = Blueprint("pessoas", __name__, template_folder="../views")
 
 @pessoas_bp.route('/pessoas')
 @login_required
@@ -31,7 +31,7 @@ def add_pessoa():
 
     if Pessoa.query.filter((Pessoa.cpf == cpf) | (Pessoa.email == email)).first():
         flash("Pessoa com CPF ou e-mail já cadastrado!", "error")
-        return redirect(url_for('pessoas_bp.cadastrar_pessoa'))
+        return redirect(url_for('pessoas.cadastrar_pessoa'))
 
     Pessoa.save_pessoa(nome=nome, cpf=cpf, telefone=telefone, data_nasc=data_nasc_obj, email=email)
     flash("Pessoa cadastrada com sucesso!", "success")
@@ -39,7 +39,7 @@ def add_pessoa():
     next_page = request.form.get("next_page")
     if next_page:
         return redirect(next_page)
-    return redirect(url_for('pessoas_bp.pessoas'))
+    return redirect(url_for('pessoas.pessoas'))
 
 @pessoas_bp.route('/editar_pessoa')
 @login_required
@@ -58,7 +58,7 @@ def update_pessoa():
     pessoa = Pessoa.query.get(pessoa_id)
     if not pessoa:
         flash("Pessoa não encontrada.", "error")
-        return redirect(url_for('pessoas_bp.pessoas'))
+        return redirect(url_for('pessoas.pessoas'))
 
     nome = request.form.get("name")
     cpf = request.form.get("cpf")
@@ -76,7 +76,7 @@ def update_pessoa():
     db.session.commit()
 
     flash("Pessoa atualizada com sucesso!", "success")
-    return redirect(url_for('pessoas_bp.pessoas'))
+    return redirect(url_for('pessoas.pessoas'))
 
 @pessoas_bp.route('/deletar_pessoa')
 @login_required
@@ -85,13 +85,13 @@ def deletar_pessoa():
     pessoa = Pessoa.query.get(pessoa_id)
     if not pessoa:
         flash("Pessoa não encontrada.", "error")
-        return redirect(url_for('pessoas_bp.pessoas'))
+        return redirect(url_for('pessoas.pessoas'))
 
     db.session.delete(pessoa)
     db.session.commit()
 
     flash("Pessoa deletada com sucesso!", "success")
-    return redirect(url_for('pessoas_bp.pessoas'))
+    return redirect(url_for('pessoas.pessoas'))
 
 @pessoas_bp.route('/info_pessoa')
 @login_required
@@ -100,6 +100,6 @@ def info_pessoa():
     pessoa = Pessoa.query.get(pessoa_id)
     if not pessoa:
         flash("Pessoa não encontrada.", "error")
-        return redirect(url_for('pessoas_bp.pessoas'))
+        return redirect(url_for('pessoas.pessoas'))
 
     return render_template("info_pessoa.html", pessoa=pessoa)
