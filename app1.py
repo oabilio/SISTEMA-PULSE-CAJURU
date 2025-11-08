@@ -54,7 +54,8 @@ def handle_log_rfid(client, rfid):
         send_response_to_esp(client, "erro", "Tag nao cadast.", rfid_tag)
 
 def handle_log_cpf(client, cpf):
-    pessoa = Pessoa.query.filter_by(cpf=cpf).first()
+    formatted_cpf = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
+    pessoa = Pessoa.query.filter_by(cpf=formatted_cpf).first()
     
     if pessoa and pessoa.voluntario and pessoa.voluntario.status == 'ativo':
         acao = Ponto.registrar_batida_rfid(pessoa.voluntario.id, None, "CPF")

@@ -155,7 +155,7 @@ def send_and_wait(payload_dict, wait_text="ENVIANDO..."):
     lcd.clear(); lcd.move_to(0, 0); lcd.putstr(wait_text)
     
     start_time = time.time()
-    while time.time() - start_time < 5:
+    while time.time() - start_time < 7:
         try:
             client.check_msg()
         except OSError as e:
