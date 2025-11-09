@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, request, render_template, redirect, url_for, flash
 from models.voluntarios.movimentacao import Movimentacao
 from models.voluntarios.voluntario import Voluntario
 from models.voluntarios.setor import Setor
@@ -36,7 +36,7 @@ def add_movimentacao():
     db.session.add(nova_movimentacao)
     db.session.commit()
 
-    #flash("Movimentação registrada com sucesso!")
+    flash("Movimentação registrada com sucesso!", "success")
     return redirect("/movimentacoes")
 
 @movimentacoes_bp.route('/editar_movimentacao')
@@ -59,7 +59,7 @@ def update_movimentacao():
     movimentacao.destino_id = request.form.get("destino_id")
 
     db.session.commit()
-    #flash("Movimentação atualizada com sucesso!")
+    flash("Movimentação atualizada com sucesso!", "success")
     return redirect("/movimentacoes")
 
 @movimentacoes_bp.route('/deletar_movimentacao', methods=['GET'])
@@ -69,5 +69,5 @@ def deletar_movimentacao():
 
     db.session.delete(movimentacao)
     db.session.commit()
-    #flash("Movimentação excluída com sucesso!")
+    flash("Movimentação excluída com sucesso!", "success")
     return redirect("/movimentacoes")

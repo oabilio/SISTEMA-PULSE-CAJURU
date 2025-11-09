@@ -19,11 +19,11 @@ def add_setor():
     descricao = request.form.get("descricao")
 
     if Setor.buscar_setor(nome):
-        #flash("Setor já existe!")
+        flash("Setor já existe!", "error")
         return redirect(url_for('setores.cadastrar_setor'))
 
     Setor.save_setor(nome=nome, descricao=descricao)
-    #flash("Setor cadastrado com sucesso!")
+    flash("Setor cadastrado com sucesso!", "success")
     return redirect("/setores")
 
 @setores_bp.route('/edit_setor')
@@ -42,7 +42,7 @@ def update_setor():
         descricao=request.form.get('descricao')
     )
 
-    #flash("Setor atualizado com sucesso!")
+    flash("Setor atualizado com sucesso!", "success")
     return redirect("/setores")
 
 @setores_bp.route('/deletar_setor', methods=['GET'])
@@ -51,10 +51,10 @@ def deletar_setor():
     setor = Setor.query.get(setor_id)
 
     if setor.movimentacoes_origem or setor.movimentacoes_destino:
-        #flash("Não é possível deletar este setor pois ele está associado a movimentações.")
+        flash("Não é possível deletar este setor pois ele está associado a movimentações.", "error")
         return redirect("/setores")
 
     db.session.delete(setor)
     db.session.commit()
-    #flash("Setor deletado com sucesso!")
+    flash("Setor deletado com sucesso!", "success")
     return redirect("/setores")

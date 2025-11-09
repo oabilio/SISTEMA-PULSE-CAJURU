@@ -33,31 +33,6 @@ def cadastrar_voluntario():
     pessoas_disponiveis = Pessoa.query.filter(Pessoa.voluntario == None).all()
     return render_template("cadastro_voluntario.html", pessoas=pessoas_disponiveis)
 
-@voluntarios_bp.route('/associar_atividade', methods=['GET', 'POST'])
-@login_required
-def associar_atividade():
-    if request.method == "POST":
-        voluntario_id = request.form.get("voluntario_id")
-        atividade_id = request.form.get("atividade_id")
-        voluntario = Voluntario.query.get(voluntario_id)
-        atividade = Atividade.query.get(atividade_id)
-
-        if not voluntario or not atividade:
-            flash("Voluntário ou atividade inválidos.", "error")
-            return redirect("/associar_atividade")
-
-        if atividade not in voluntario.atividades:
-            voluntario.atividades.append(atividade)
-            db.session.commit()
-            flash(f"Atividade '{atividade.nome}' associada.", "success")
-        else:
-            flash("O voluntário já possui esta atividade.", "info")
-        return redirect("/associar_atividade")
-
-    voluntarios = Voluntario.query.filter_by(status="ativo").all()
-    atividades = Atividade.query.filter_by(ativo=True).all()
-    return render_template("associar_atividade.html", voluntarios=voluntarios, atividades=atividades)
-
 @voluntarios_bp.route('/editar_voluntario/<int:voluntario_id>', methods=['GET', 'POST'])
 @login_required
 def editar_voluntario(voluntario_id):

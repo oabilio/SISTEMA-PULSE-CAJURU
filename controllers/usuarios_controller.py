@@ -24,7 +24,7 @@ def cadastrar_usuario():
         role_id = request.form.get("role_id")
 
         Usuario.save_usuario(pessoa_id=pessoa_id, login=login, senha=senha, role_id=role_id)
-        #flash("Usuário cadastrado com sucesso!")
+        flash("Usuário cadastrado com sucesso!", "success")
         return redirect("/usuarios")
 
     pessoas_disponiveis = Pessoa.query.filter(Pessoa.usuario == None).all()
@@ -36,7 +36,7 @@ def cadastrar_usuario():
 def editar_usuario(usuario_id):
     usuario = Usuario.query.get(usuario_id)
     if not usuario:
-        #flash("Usuário não encontrado.")
+        flash("Usuário não encontrado.", "error")
         return redirect("/usuarios")
 
     if request.method == "POST":
@@ -49,7 +49,7 @@ def editar_usuario(usuario_id):
             usuario.senha_hash = generate_password_hash(nova_senha)
 
         db.session.commit()
-        #flash("Usuário atualizado com sucesso!")
+        flash("Usuário atualizado com sucesso!", "success")
         return redirect("/usuarios")
 
     roles = Role.query.all()
@@ -60,14 +60,14 @@ def editar_usuario(usuario_id):
 def deletar_usuario(usuario_id):
     usuario = Usuario.query.get(usuario_id)
     if not usuario:
-        #flash("Usuário não encontrado.")
+        flash("Usuário não encontrado.", "error")
         return redirect("/usuarios")
 
     if usuario.role.name.lower() == "admin":
-        #flash("Não é permitido excluir um usuário administrador.")
+        flash("Não é permitido excluir um usuário administrador.", "error")
         return redirect("/usuarios")
 
     db.session.delete(usuario)
     db.session.commit()
-    #flash(f"Usuário '{usuario.login}' deletado com sucesso!")
+    flash(f"Usuário '{usuario.login}' deletado com sucesso!", "success")
     return redirect("/usuarios")
