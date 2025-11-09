@@ -1,4 +1,6 @@
-//logica websocket
+var chartSetoresInstance = null;
+var chartPontosInstance = null;
+
 function showDynamicFlash(message, category) {
   var container = document.getElementById("dynamic-flash-container");
   if (!container) return;
@@ -36,9 +38,23 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     socket.on("update_ponto", function (data) {
       console.log("Evento recebido:", data.msg);
-      if (window.location.pathname.includes("/ponto")) {
+
+      if (
+        window.location.pathname.includes("/ponto") ||
+        window.location.pathname.includes("/home")
+      ) {
         showDynamicFlash(data.msg, "success");
-        setTimeout(() => window.location.reload(), 1000);
+
+        const currentUrl = new URL(window.location.href);
+        const dateParam = currentUrl.searchParams.get("date");
+
+        let reloadUrl = window.location.pathname;
+
+        if (dateParam) {
+          reloadUrl += "?date=" + dateParam;
+        }
+
+        setTimeout(() => (window.location.href = reloadUrl), 1000);
       }
     });
 
@@ -65,5 +81,90 @@ document.addEventListener("DOMContentLoaded", (event) => {
       setTimeout(() => el.remove(), 500);
     });
   }, 5000);
+
+  const dateFilter = document.getElementById("date-filter");
+  if (dateFilter) {
+    dateFilter.addEventListener("change", (e) => {
+      const newDate = e.target.value;
+      if (newDate) {
+        window.location.href = "/home?date=" + newDate;
+      } else {
+        window.location.href = "/home";
+      }
+    });
+  }
+
+  if (typeof Chart !== "undefined" && window.chartData) {
+    const ctxSetores = document.getElementById("chartSetores");
+    if (ctxSetores) {
+      chartSetoresInstance = new Chart(ctxSetores, {
+        type: "doughnut",
+        data: {
+          labels: window.chartData.setores_labels,
+          datasets: [
+            {
+              label: "Movimentações",
+              data: window.chartData.setores_data,
+              backgroundColor: [
+                "#4F46E5",
+                "#7C3AED",
+                "#EC4899",
+                "#F59E0B",
+                "#10B981",
+                "#3B82F6",
+                "#6366F1",
+                "#D946EF",
+                "#FCD34D",
+                "#34D399",
+              ],
+              hoverOffset: 4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "left",
+            },
+          },
+        },
+      });
+    }
+
+    const ctxPontos = document.getElementById("chartPontos");
+    if (ctxPontos) {
+      chartPontosInstance = new Chart(ctxPontos, {
+        type: "bar",
+        data: {
+          labels: window.chartData.dias_labels,
+          datasets: [
+            {
+              label: "Registros de Ponto",
+              data: window.chartData.dias_data,
+              backgroundColor: "rgba(79, 70, 229, 0.7)",
+              borderColor: "rgba(79, 70, 229, 1)",
+              borderWidth: 1,
+              borderRadius: 4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 50,
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+        },
+      });
+    }
+  }
 });
-//fim logica websocket
