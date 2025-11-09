@@ -12,6 +12,8 @@ class Voluntario(db.Model):
     data_entrada = db.Column(db.DateTime, default=func.now())
     status = db.Column(db.String(10), default="ativo")
 
+    documentacao = db.relationship("Documentacao", back_populates="voluntario", uselist=False, cascade="all, delete-orphan")
+
     @classmethod
     def save_voluntario(cls, pessoa_id, codigo_rfid=None, status="ativo"):
         voluntario = cls(pessoa_id=pessoa_id, codigo_rfid=codigo_rfid, status=status)

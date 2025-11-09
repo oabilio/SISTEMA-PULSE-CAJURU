@@ -102,6 +102,7 @@ def avaliar_pendencia(pendencia_id):
         doc.doc1_id = doc1.id
         doc.doc2_id = doc2.id
         doc.doc3_id = doc3.id
+        doc.doc4_id = doc4.id
         db.session.commit()
 
         pendencia.payload = None
@@ -121,17 +122,17 @@ def avaliar_pendencia(pendencia_id):
         "nome_conjuge": data.get("nome_conjuge"),
         "nome_pai": data.get("nome_pai"),
         "nome_mae": data.get("nome_mae"),
-        
+
         "endereco_residencial": data.get("endereco_residencial"),
         "numero": data.get("numero"),
         "bairro": data.get("bairro"),
         "cidade": data.get("cidade"),
         "cep": data.get("cep"),
-        
+
         "tel_residencial": data.get("tel_residencial"),
         "celular": data.get("celular"),
         "telefone_trabalho": data.get("telefone_trabalho"),
-        
+
         "religiao": data.get("religiao"),
         "escolaridade_curso": data.get("escolaridade_curso"),
         "local_trabalho": data.get("local_trabalho"),
@@ -141,7 +142,7 @@ def avaliar_pendencia(pendencia_id):
         "tratamento_saude_para": data.get("tratamento_saude_para"),
         "transporte": data.get("transporte"),
         "como_soube_voluntariado": data.get("como_soube_voluntariado"),
-        
+
         "ja_trabalhou_voluntario": data.get("ja_trabalhou_voluntario"),
         "ja_trabalhou_voluntario_onde": data.get("ja_trabalhou_voluntario_onde"),
         "faz_parte_grupo_voluntariado": data.get("faz_parte_grupo_voluntariado"),
@@ -150,10 +151,17 @@ def avaliar_pendencia(pendencia_id):
         "habilidade_musical": data.get("habilidade_musical"),
         "qual_habilidade_musical": data.get("qual_habilidade_musical"),
         "auxiliar_alimentacao": data.get("auxiliar_alimentacao"),
-
-        **{k: v for k, v in data.items() if any(k.startswith(d) for d in [
-            "segunda", "terca", "quarta", "quinta", "sexta", "sabado", "domingo"
-        ])},
     }
+
+    dias_semana = ["segunda", "terca", "quarta", "quinta", "sexta", "sabado", "domingo"]
+
+    for dia in dias_semana:
+        inicio = data.get(f"{dia}_inicio")
+        fim = data.get(f"{dia}_fim")
+
+        if inicio is not None:
+            dados[f"{dia}_inicio"] = inicio
+        if fim is not None:
+            dados[f"{dia}_fim"] = fim
 
     return render_template("avaliacao.html", pendencia=pendencia, dados=dados)

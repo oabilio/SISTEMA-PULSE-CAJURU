@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Detalhes do Voluntário{% endblock %}
+{% block header_title %}Informações do Voluntário{% endblock %}
+
+{% block content %}
+<div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 max-w-4xl mx-auto space-y-6">
+
+    {% if doc1 %}
+    <h2 class="text-2xl font-bold text-indigo-700 mt-6 mb-4">Informações Pessoais</h2>
+    <ul class="space-y-2 text-gray-700">
+        <li><strong>Nome:</strong> {{ doc1.nome }}</li>
+        <li><strong>Data de Nascimento:</strong> {% if doc1.data_nascimento %}{{ doc1.data_nascimento.strftime('%d/%m/%Y') }}{% else %}-{% endif %}</li>
+        <li><strong>Local de Nascimento:</strong> {{ doc1.local_nascimento or '-' }}</li>
+        <li><strong>CPF:</strong> {{ doc1.cpf or '-' }}</li>
+        <li><strong>Email:</strong> {{ doc1.email or '-' }}</li>
+        <li><strong>Estado Civil:</strong> {{ doc1.estado_civil or '-' }}</li>
+        <li><strong>Nome do Cônjuge:</strong> {{ doc1.nome_conjuge or '-' }}</li>
+        <li><strong>Nome do Pai:</strong> {{ doc1.nome_pai or '-' }}</li>
+        <li><strong>Nome da Mãe:</strong> {{ doc1.nome_mae or '-' }}</li>
+        <li><strong>Endereço:</strong> {{ doc1.endereco_residencial or '-' }}, {{ doc1.numero or '-' }}, {{ doc1.bairro or '-' }}, {{ doc1.cidade or '-' }}, {{ doc1.cep or '-' }}</li>
+        <li><strong>Telefone Residencial:</strong> {{ doc1.tel_residencial or '-' }}</li>
+        <li><strong>Celular:</strong> {{ doc1.celular or '-' }}</li>
+        <li><strong>Religião:</strong> {{ doc1.religiao or '-' }}</li>
+        <li><strong>Escolaridade / Curso:</strong> {{ doc1.escolaridade_curso or '-' }}</li>
+        <li><strong>Local de Trabalho:</strong> {{ doc1.local_trabalho or '-' }}</li>
+        <li><strong>Telefone do Trabalho:</strong> {{ doc1.telefone_trabalho or '-' }}</li>
+        <li><strong>Ocupação:</strong> {{ doc1.ocupacao or '-' }}</li>
+        <li><strong>Tratamento de Saúde:</strong> {{ doc1.tratamento_saude or '-' }}</li>
+        <li><strong>Para quê?</strong> {{ doc1.tratamento_saude_para or '-' }}</li>
+        <li><strong>Transporte:</strong> {{ doc1.transporte or '-' }}</li>
+        <li><strong>Como soube do voluntariado:</strong> {{ doc1.como_soube_voluntariado or '-' }}</li>
+    </ul>
+    {% endif %}
+
+    {% if doc2 %}
+    <h2 class="text-2xl font-bold text-indigo-700 mt-6 mb-4">Histórico</h2>
+    <ul class="space-y-2 text-gray-700">
+        <li><strong>Já trabalhou como voluntário:</strong> {{ doc2.ja_trabalhou_voluntario or '-' }}</li>
+        <li><strong>Onde:</strong> {{ doc2.ja_trabalhou_voluntario_onde or '-' }}</li>
+        <li><strong>Faz parte de grupo de voluntariado:</strong> {{ doc2.faz_parte_grupo_voluntariado or '-' }}</li>
+        <li><strong>Qual grupo:</strong> {{ doc2.qual_grupo_voluntariado or '-' }}</li>
+        <li><strong>Contribuição voluntariado:</strong> {{ doc2.contribuicao_voluntariado or '-' }}</li>
+        <li><strong>Habilidade musical:</strong> {{ doc2.habilidade_musical or '-' }}</li>
+        <li><strong>Qual habilidade:</strong> {{ doc2.qual_habilidade_musical or '-' }}</li>
+        <li><strong>Auxiliar alimentação:</strong> {{ doc2.auxiliar_alimentacao or '-' }}</li>
+    </ul>
+    {% endif %}
+
+    {% if doc3 %}
+    <h2 class="text-2xl font-bold text-indigo-700 mt-6 mb-4">Disponibilidade</h2>
+    <ul class="space-y-2 text-gray-700">
+        <li><strong>Segunda:</strong> {{ doc3.segunda_inicio or '-' }} - {{ doc3.segunda_fim or '-' }}</li>
+        <li><strong>Terça:</strong> {{ doc3.terca_inicio or '-' }} - {{ doc3.terca_fim or '-' }}</li>
+        <li><strong>Quarta:</strong> {{ doc3.quarta_inicio or '-' }} - {{ doc3.quarta_fim or '-' }}</li>
+        <li><strong>Quinta:</strong> {{ doc3.quinta_inicio or '-' }} - {{ doc3.quinta_fim or '-' }}</li>
+        <li><strong>Sexta:</strong> {{ doc3.sexta_inicio or '-' }} - {{ doc3.sexta_fim or '-' }}</li>
+        <li><strong>Sábado:</strong> {{ doc3.sabado_inicio or '-' }} - {{ doc3.sabado_fim or '-' }}</li>
+        <li><strong>Domingo:</strong> {{ doc3.domingo_inicio or '-' }} - {{ doc3.domingo_fim or '-' }}</li>
+    </ul>
+    {% endif %}
+
+    {% if doc4 %}
+    <h2 class="text-2xl font-bold text-indigo-700 mt-6 mb-4">Ficha de Aprovação:</h2>
+    <ul class="space-y-2 text-gray-700">
+        <li><strong>Aprovado:</strong> {{ doc4.aprovado or '-' }}</li>
+        <li><strong>Motivo:</strong> {{ doc4.motivo or '-' }}</li>
+        <li><strong>Data Início:</strong> {% if doc4.data_inicio %}{{ doc4.data_inicio.strftime('%d/%m/%Y') }}{% else %}-{% endif %}</li>
+        <li><strong>Data Acolher:</strong> {% if doc4.data_acolher %}{{ doc4.data_acolher.strftime('%d/%m/%Y') }}{% else %}-{% endif %}</li>
+        <li><strong>Data CAV:</strong> {% if doc4.data_cav %}{{ doc4.data_cav.strftime('%d/%m/%Y') }}{% else %}-{% endif %}</li>
+        <li><strong>Vacina Início:</strong> {% if doc4.vacina_inicio %}{{ doc4.vacina_inicio.strftime('%d/%m/%Y') }}{% else %}-{% endif %}</li>
+        <li><strong>Vacina Final:</strong> {% if doc4.vacina_final %}{{ doc4.vacina_final.strftime('%d/%m/%Y') }}{% else %}-{% endif %}</li>
+        <li><strong>Foto Data:</strong> {% if doc4.foto_data %}{{ doc4.foto_data.strftime('%d/%m/%Y') }}{% else %}-{% endif %}</li>
+        <li><strong>Crachá Data:</strong> {% if doc4.cracha_data %}{{ doc4.cracha_data.strftime('%d/%m/%Y') }}{% else %}-{% endif %}</li>
+    </ul>
+    {% endif %}
+
+    <div class="mt-6">
+        <a href="{{ url_for('documentacoes.lista_documentacoes') }}" class="text-white bg-gray-500 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 transition duration-200">
+            Voltar
+        </a>
+    </div>
+</div>
+{% endblock %}

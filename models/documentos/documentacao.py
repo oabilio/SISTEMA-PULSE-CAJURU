@@ -6,8 +6,8 @@ class Documentacao(db.Model):
     __tablename__ = "documentacao"
 
     id = db.Column(db.Integer, primary_key=True)
-    voluntario_id = db.Column(db.Integer, db.ForeignKey("voluntario.id"), nullable=True)
-    
+    voluntario_id = db.Column(db.Integer, db.ForeignKey("voluntario.id"), unique=True, nullable=True)
+
     doc1_id = db.Column(db.Integer, db.ForeignKey("doc1.id"), nullable=True)
     doc2_id = db.Column(db.Integer, db.ForeignKey("doc2.id"), nullable=True)
     doc3_id = db.Column(db.Integer, db.ForeignKey("doc3.id"), nullable=True)
@@ -16,8 +16,9 @@ class Documentacao(db.Model):
     criado_em = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     atualizado_em = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=True)
 
-    voluntario = db.relationship("Voluntario", backref=db.backref("documentacoes", lazy=True))
-    doc1 = db.relationship("Doc1", backref=db.backref("documentacao", lazy=True))
-    doc2 = db.relationship("Doc2", backref=db.backref("documentacao", lazy=True))
-    doc3 = db.relationship("Doc3", backref=db.backref("documentacao", lazy=True))
-    doc4 = db.relationship("Doc4", backref=db.backref("documentacao", lazy=True))
+    voluntario = db.relationship("Voluntario", back_populates="documentacao", uselist=False)
+
+    doc1 = db.relationship("Doc1", backref=db.backref("documentacao", uselist=False))
+    doc2 = db.relationship("Doc2", backref=db.backref("documentacao", uselist=False))
+    doc3 = db.relationship("Doc3", backref=db.backref("documentacao", uselist=False))
+    doc4 = db.relationship("Doc4", backref=db.backref("documentacao", uselist=False))

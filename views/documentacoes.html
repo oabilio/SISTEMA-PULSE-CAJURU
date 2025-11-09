@@ -37,16 +37,16 @@
                 <td class="px-6 py-4 font-medium text-gray-900">{{ item.voluntario.pessoa.nome }}</td>
                 <td class="px-6 py-4">
                     {% if item.status == 'Com documentação' %}
-                        <span class="text-green-600 font-medium">{{ item.status }}</span>
+                    <span class="text-green-600 font-medium">{{ item.status }}</span>
                     {% else %}
-                        <span class="text-gray-500">{{ item.status }}</span>
+                    <span class="text-gray-500">{{ item.status }}</span>
                     {% endif %}
                 </td>
                 <td class="px-6 py-4">
                     {% if item.acao.tipo == 'info' %}
-                        <a href="{{ item.acao.url }}" class="text-blue-600 hover:underline">Ver informações</a>
+                    <a href="{{ url_for('documentacoes.info_voluntario', voluntario_id=item.voluntario.id) }}" class="text-blue-600 hover:underline">Ver informações</a>
                     {% else %}
-                        <a href="" class="text-green-600 hover:underline">Criar documentação</a>
+                    <a href="{{ url_for('documentacoes.criar_manual', voluntario_id=item.voluntario.id) }}" class="text-green-600 hover:underline">Criar documentação</a>
                     {% endif %}
                 </td>
             </tr>
