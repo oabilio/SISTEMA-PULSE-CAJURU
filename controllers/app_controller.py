@@ -21,6 +21,29 @@ from models.voluntarios.ponto import Ponto
 from sqlalchemy import func
 from datetime import datetime, timedelta
 
+def _get_dashboard_data(target_date):
+    
+    voluntarios_trabalhando_agora = Ponto.query.filter(Ponto.saida == None).count()
+    entradas_do_dia = Ponto.query.filter(func.date(Ponto.entrada) == target_date).count()
+    saidas_do_dia = Ponto.query.filter(func.date(Ponto.saida) == target_date).count()
+
+    dias_labels = []
+    dias_data = []
+    today_for_chart = datetime.utcnow().date()
+    for i in range(6, -1, -1):
+        date_to_check = today_for_chart - timedelta(days=i)
+        dias_labels.append(date_to_check.strftime('%d/%m'))
+        count = Ponto.query.filter(func.date(Ponto.entrada) == date_to_check).count()
+        dias_data.append(count)
+    
+    return {
+        "voluntarios_trabalhando_agora": voluntarios_trabalhando_agora,
+        "entradas_do_dia": entradas_do_dia,
+        "saidas_do_dia": saidas_do_dia,
+        "dias_labels": dias_labels,
+        "dias_data": dias_data
+    }
+
 def create_app():
     app = Flask(__name__,
                 template_folder="./views/",
@@ -105,18 +128,7 @@ def create_app():
         setores_labels = [row[0] for row in setores_data_query]
         setores_data = [row[1] for row in setores_data_query]
 
-        dias_labels = []
-        dias_data = []
-        today_for_chart = datetime.utcnow().date()
-        for i in range(6, -1, -1):
-            date_to_check = today_for_chart - timedelta(days=i)
-            dias_labels.append(date_to_check.strftime('%d/%m'))
-            count = Ponto.query.filter(func.date(Ponto.entrada) == date_to_check).count()
-            dias_data.append(count)
-        
-        voluntarios_trabalhando_agora = Ponto.query.filter(Ponto.saida == None).count()
-        entradas_do_dia = Ponto.query.filter(func.date(Ponto.entrada) == target_date).count()
-        saidas_do_dia = Ponto.query.filter(func.date(Ponto.saida) == target_date).count()
+        stats_data = _get_dashboard_data(target_date)
 
         return render_template(
             'home.html',
@@ -126,29 +138,27 @@ def create_app():
             economia_estimativa=economia_estimativa,
             setores_labels=setores_labels,
             setores_data=setores_data,
-            dias_labels=dias_labels,
-            dias_data=dias_data,
-            voluntarios_trabalhando_agora=voluntarios_trabalhando_agora,
-            entradas_do_dia=entradas_do_dia,
-            saidas_do_dia=saidas_do_dia,
+            dias_labels=stats_data["dias_labels"],
+            dias_data=stats_data["dias_data"],
+            voluntarios_trabalhando_agora=stats_data["voluntarios_trabalhando_agora"],
+            entradas_do_dia=stats_data["entradas_do_dia"],
+            saidas_do_dia=stats_data["saidas_do_dia"],
             target_date_str=target_date_str
         )
 
-    @app.route('/api/ponto_data')
+    @app.route('/api/dashboard_stats')
     @login_required
-    def api_ponto_data():
-        dias_labels = []
-        dias_data = []
-        today = datetime.utcnow().date()
-        for i in range(6, -1, -1):
-            date_to_check = today - timedelta(days=i)
-            dias_labels.append(date_to_check.strftime('%d/%m'))
-            count = Ponto.query.filter(func.date(Ponto.entrada) == date_to_check).count()
-            dias_data.append(count)
-        
-        return jsonify(
-            dias_labels=dias_labels,
-            dias_data=dias_data
-        )
+    def api_dashboard_stats():
+        date_str = request.args.get('date')
+        if date_str:
+            try:
+                target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            except ValueError:
+                target_date = datetime.utcnow().date()
+        else:
+            target_date = datetime.utcnow().date()
+            
+        stats = _get_dashboard_data(target_date)
+        return jsonify(stats)
 
     return app

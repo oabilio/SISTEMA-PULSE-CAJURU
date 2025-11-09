@@ -12,7 +12,8 @@ Dashboard Geral
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 text-center">
             <h3 class="text-gray-500 text-sm font-medium mb-2">Trabalhando Agora</h3>
-            <p class="text-3xl font-semibold text-green-600">{{ voluntarios_trabalhando_agora }}</p>
+            <p class="text-3xl font-semibold text-green-600" id="card-trabalhando-agora">{{
+                voluntarios_trabalhando_agora }}</p>
         </div>
 
         <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 text-center">
@@ -49,11 +50,11 @@ Dashboard Geral
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
                 <h4 class="text-gray-600 text-sm font-medium">Entradas Registradas</h4>
-                <p id="card-entradas" class="text-3xl font-semibold text-blue-700">{{ entradas_do_dia }}</p>
+                <p class="text-3xl font-semibold text-blue-700" id="card-entradas-dia">{{ entradas_do_dia }}</p>
             </div>
             <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
                 <h4 class="text-gray-600 text-sm font-medium">Saídas Registradas</h4>
-                <p id="card-saidas" class="text-3xl font-semibold text-green-700">{{ saidas_do_dia }}</p>
+                <p class="text-3xl font-semibold text-green-700" id="card-saidas-dia">{{ saidas_do_dia }}</p>
             </div>
         </div>
     </div>

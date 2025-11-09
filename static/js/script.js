@@ -26,6 +26,36 @@ function showDynamicFlash(message, category) {
   }, 5000);
 }
 
+function updateDashboardStats() {
+  const dateFilter = document.getElementById("date-filter");
+  const currentDate = dateFilter ? dateFilter.value : "";
+
+  let apiUrl = "/api/dashboard_stats";
+  if (currentDate) {
+    apiUrl += "?date=" + currentDate;
+  }
+
+  fetch(apiUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      const cardTrabalhando = document.getElementById("card-trabalhando-agora");
+      const cardEntradas = document.getElementById("card-entradas-dia");
+      const cardSaidas = document.getElementById("card-saidas-dia");
+
+      if (cardTrabalhando)
+        cardTrabalhando.innerText = data.voluntarios_trabalhando_agora;
+      if (cardEntradas) cardEntradas.innerText = data.entradas_do_dia;
+      if (cardSaidas) cardSaidas.innerText = data.saidas_do_dia;
+
+      if (chartPontosInstance) {
+        chartPontosInstance.data.labels = data.dias_labels;
+        chartPontosInstance.data.datasets[0].data = data.dias_data;
+        chartPontosInstance.update();
+      }
+    })
+    .catch((e) => console.error("Erro ao atualizar dashboard:", e));
+}
+
 document.addEventListener("DOMContentLoaded", (event) => {
   try {
     var socket = io.connect(
@@ -39,22 +69,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     socket.on("update_ponto", function (data) {
       console.log("Evento recebido:", data.msg);
 
-      if (
-        window.location.pathname.includes("/ponto") ||
-        window.location.pathname.includes("/home")
-      ) {
+      if (window.location.pathname.includes("/ponto")) {
         showDynamicFlash(data.msg, "success");
+        setTimeout(() => window.location.reload(), 1000);
+      }
 
-        const currentUrl = new URL(window.location.href);
-        const dateParam = currentUrl.searchParams.get("date");
-
-        let reloadUrl = window.location.pathname;
-
-        if (dateParam) {
-          reloadUrl += "?date=" + dateParam;
-        }
-
-        setTimeout(() => (window.location.href = reloadUrl), 1000);
+      if (window.location.pathname.includes("/home")) {
+        console.log("Atualizando dashboard via API...");
+        showDynamicFlash(data.msg, "success");
+        updateDashboardStats();
       }
     });
 
