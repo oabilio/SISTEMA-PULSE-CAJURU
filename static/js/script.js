@@ -117,6 +117,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
   }
 
+  const dateFilterDia = document.getElementById("date-filter-dia");
+  const downloadBtnDia = document.getElementById("btn-download-dia");
+  if (dateFilterDia && downloadBtnDia) {
+    dateFilterDia.addEventListener("change", (e) => {
+      const newDate = e.target.value;
+      let baseUrl = downloadBtnDia.href.split("?")[0];
+      if (newDate) {
+        downloadBtnDia.href = baseUrl + "?date=" + newDate;
+      }
+    });
+  }
+
   if (typeof Chart !== "undefined" && window.chartData) {
     const ctxSetores = document.getElementById("chartSetores");
     if (ctxSetores) {

@@ -40,11 +40,20 @@ Dashboard Geral
     <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
         <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
             <h3 class="text-lg font-semibold text-indigo-700">Estatísticas do Dia</h3>
-            <div>
+
+            <div class="flex items-center space-x-2">
                 <label for="date-filter" class="text-sm font-medium text-gray-700 mr-2">Selecionar Data:</label>
                 <input type="date" id="date-filter" name="date-filter" value="{{ target_date_str }}"
                     class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 p-2">
+
+                <a id="btn-download-home"
+                    href="{{ url_for('relatorios.gerar_relatorio_dashboard_dia', date=target_date_str) }}"
+                    class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition duration-200">
+                    <i class="fa-solid fa-file-excel mr-1"></i>
+                    Baixar
+                </a>
             </div>
+
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -76,10 +85,10 @@ Dashboard Geral
 {% block scripts %}
 <script>
     window.chartData = {
-        setores_labels: {{ setores_labels | default([]) | tojson }},
-        setores_data: {{ setores_data | default([]) | tojson }},
-        dias_labels: {{ dias_labels | default([]) | tojson }},
-        dias_data: {{ dias_data | default([]) | tojson }}
+        setores_labels: {{ setores_labels | default ([]) | tojson }},
+        setores_data: {{ setores_data | default ([]) | tojson }},
+        dias_labels: {{ dias_labels | default ([]) | tojson }},
+        dias_data: {{ dias_data | default ([]) | tojson }}
     };
 </script>
 

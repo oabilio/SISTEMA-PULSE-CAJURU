@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Relatórios{% endblock %}
+
+{% block header_title %}
+Emissão de Relatórios
+{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-4xl mx-auto px-4 py-6 space-y-8">
+
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+        <h3 class="text-lg font-semibold text-indigo-700 mb-4">Relatório Diário do Dashboard</h3>
+        <p class="text-gray-600 mb-4">
+            Gera um resumo dos principais KPIs do dashboard (Voluntários ativos, trabalhando agora, etc.)
+            para um dia específico.
+        </p>
+
+        <div class="flex items-center space-x-2">
+            <label for="date-filter-dia" class="text-sm font-medium text-gray-700 mr-2">Data do Relatório:</label>
+            <input type="date" id="date-filter-dia" name="date-filter-dia" value="{{ hoje_str }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 p-2">
+
+            <a id="btn-download-dia" href="{{ url_for('relatorios.gerar_relatorio_dashboard_dia', date=hoje_str) }}"
+                class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition duration-200">
+                <i class="fa-solid fa-file-excel mr-1"></i>
+                Baixar Resumo do Dia
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+        <h3 class="text-lg font-semibold text-indigo-700 mb-4">Relatório Mensal Completo</h3>
+        <p class="text-gray-600 mb-4">
+            Gera uma planilha no formato matricial (similar ao seu template) com o total de horas,
+            contagem de pontos e indicadores de voluntariado, tudo agrupado por mês/ano.
+        </p>
+
+        <div class="flex items-center space-x-4">
+            <a href="{{ url_for('relatorios.gerar_relatorio_completo_mensal') }}"
+                class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center transition duration-200">
+                <i class="fa-solid fa-file-excel mr-1"></i>
+                Baixar Relatório Mensal Completo
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const dateFilter = document.getElementById('date-filter-dia');
+        const downloadBtn = document.getElementById('btn-download-dia');
+
+        if (dateFilter && downloadBtn) {
+            dateFilter.addEventListener('change', (e) => {
+                const newDate = e.target.value;
+                if (newDate) {
+                    const baseUrl = "{{ url_for('relatorios.gerar_relatorio_dashboard_dia') }}";
+                    downloadBtn.href = baseUrl + '?date=' + newDate;
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -10,6 +10,7 @@ from controllers.setores_controller import setores_bp
 from controllers.movimentacoes_controller import movimentacoes_bp
 from controllers.documentacoes_controller import documentacoes_bp
 from controllers.pendencias_controller import pendencias_bp
+from controllers.relatorios_controller import relatorios_bp
 from models.db import db, instance
 from models.user.usuarios import Usuario
 
@@ -72,6 +73,7 @@ def create_app():
     app.register_blueprint(movimentacoes_bp, url_prefix="/")
     app.register_blueprint(documentacoes_bp, url_prefix="/")
     app.register_blueprint(pendencias_bp, url_prefix="/")
+    app.register_blueprint(relatorios_bp, url_prefix='/')
 
     @login_manager.user_loader
     def load_user(user_id):
