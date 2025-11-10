@@ -1,5 +1,4 @@
 from models.db import db
-from sqlalchemy.sql import func
 
 class Movimentacao(db.Model):
     __tablename__ = "movimentacao"
@@ -8,7 +7,7 @@ class Movimentacao(db.Model):
     solicitante = db.Column(db.String(100), nullable=False)
     paciente = db.Column(db.String(100), nullable=False)
     id_voluntario = db.Column(db.Integer, db.ForeignKey('voluntario.id'), nullable=False)
-    data = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    data = db.Column(db.Date, nullable=True)
 
     origem_id = db.Column(db.Integer, db.ForeignKey('setor.id'), nullable=False)
     destino_id = db.Column(db.Integer, db.ForeignKey('setor.id'), nullable=False)

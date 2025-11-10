@@ -2,7 +2,6 @@ from models.db import db
 from sqlalchemy.sql import func
 from datetime import datetime
 
-
 class Ponto(db.Model):
     __tablename__ = "ponto"
 
@@ -12,9 +11,7 @@ class Ponto(db.Model):
     origem = db.Column(db.String(100), nullable=True)
     observacao = db.Column(db.Text, nullable=True)
     rfid = db.Column(db.String(100), nullable=True)
-    id_voluntario = db.Column(
-        db.Integer, db.ForeignKey("voluntario.id"), nullable=False
-    )
+    id_voluntario = db.Column(db.Integer, db.ForeignKey("voluntario.id"), nullable=False)
 
     atividade_id = db.Column(db.Integer, db.ForeignKey("atividade.id"), nullable=True)
 

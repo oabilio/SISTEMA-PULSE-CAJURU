@@ -6,8 +6,12 @@ from models.db import db
 from models.voluntarios.ponto import Ponto
 from models.voluntarios.voluntario import Voluntario
 from models.voluntarios.atividade import Atividade
+from models.user.pessoa import Pessoa
 from sqlalchemy import func, extract
 from datetime import datetime
+from openpyxl import Workbook
+from io import BytesIO
+import calendar
 
 relatorios_bp = Blueprint("relatorios", __name__, template_folder="../views")
 
@@ -16,70 +20,6 @@ relatorios_bp = Blueprint("relatorios", __name__, template_folder="../views")
 def pagina_relatorios():
     hoje_str = datetime.utcnow().date().isoformat()
     return render_template("relatorios.html", hoje_str=hoje_str)
-
-@relatorios_bp.route("/relatorio/dashboard_dia")
-@login_required
-def gerar_relatorio_dashboard_dia():
-    
-    date_str = request.args.get('date')
-    if date_str:
-        try:
-            target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-        except ValueError:
-            target_date = datetime.utcnow().date()
-    else:
-        target_date = datetime.utcnow().date()
-    
-    target_date_str = target_date.isoformat()
-
-    kpis = db.session.query(
-        func.count(Ponto.query.filter(Ponto.saida == None).subquery().c.id).label("trabalhando_agora"),
-        func.count(Ponto.query.filter(func.date(Ponto.entrada) == target_date).subquery().c.id).label("entradas_dia"),
-        func.count(Ponto.query.filter(func.date(Ponto.saida) == target_date).subquery().c.id).label("saidas_dia"),
-        func.count(Voluntario.query.filter_by(status='ativo').subquery().c.id).label("voluntarios_ativos"),
-        func.count(Atividade.query.filter_by(ativo=True).subquery().c.id).label("atividades_ativas")
-    ).first()
-
-    pontos_abertos_query = Ponto.query.filter(Ponto.saida == None).order_by(Ponto.entrada.desc()).all()
-    
-    df_kpis = pd.DataFrame({
-        "Métrica": [
-            "Trabalhando Agora", 
-            f"Entradas em {target_date_str}", 
-            f"Saídas em {target_date_str}",
-            "Total Voluntários Ativos",
-            "Total Atividades Ativas"
-        ],
-        "Valor": [
-            kpis.trabalhando_agora,
-            kpis.entradas_dia,
-            kpis.saidas_dia,
-            kpis.voluntarios_ativos,
-            kpis.atividades_ativas
-        ]
-    })
-
-    data_trabalhando = [{
-        "Voluntário": p.voluntario.pessoa.nome,
-        "Entrada": p.entrada.strftime('%Y-%m-%d %H:%M:%S'),
-        "Origem": p.origem
-    } for p in pontos_abertos_query]
-    df_trabalhando = pd.DataFrame(data_trabalhando)
-
-    buffer = io.BytesIO()
-    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
-        df_kpis.to_excel(writer, sheet_name='Resumo_Dashboard_Dia', index=False)
-        df_trabalhando.to_excel(writer, sheet_name='Trabalhando_Agora', index=False)
-    
-    buffer.seek(0)
-    
-    return send_file(
-        buffer,
-        as_attachment=True,
-        download_name=f'relatorio_pulse_dia_{target_date_str}.xlsx',
-        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-
 
 def _get_pivot_table_df(agg_column, agg_func):
     
@@ -176,25 +116,121 @@ def _get_indicadores_voluntarios_df():
     
     return df_geral_pivot
 
-@relatorios_bp.route("/relatorio/completo_mensal")
+@relatorios_bp.route("/relatorio/lista_presenca_mes")
 @login_required
-def gerar_relatorio_completo_mensal():
-    
-    df_contagem = _get_pivot_table_df(agg_column='contagem', agg_func='sum')
-    df_horas = _get_pivot_table_df(agg_column='horas', agg_func='sum')
-    df_indicadores_vol = _get_indicadores_voluntarios_df()
+def gerar_presenca_mensal():
+    mes = int(request.args.get("mes", datetime.now().month))
+    ano = datetime.now().year
 
-    buffer = io.BytesIO()
-    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
-        df_contagem.to_excel(writer, sheet_name='Contagem por Atividade')
-        df_horas.to_excel(writer, sheet_name='Horas por Atividade')
-        df_indicadores_vol.to_excel(writer, sheet_name='Indicadores Voluntarios')
-    
-    buffer.seek(0)
-    
+    ultimo_dia = calendar.monthrange(ano, mes)[1]
+    inicio = datetime(ano, mes, 1, 0, 0, 0)
+    fim = datetime(ano, mes, ultimo_dia, 23, 59, 59)
+
+    pontos = (
+        Ponto.query
+        .join(Voluntario)
+        .join(Pessoa, Voluntario.pessoa)
+        .join(Atividade)
+        .filter(Ponto.entrada.between(inicio, fim))
+        .all()
+    )
+
+    wb = Workbook()
+    wb.remove(wb.active)
+
+    atividades = {}
+    for ponto in pontos:
+        if ponto.atividade.nome not in atividades:
+            atividades[ponto.atividade.nome] = []
+        atividades[ponto.atividade.nome].append(ponto)
+
+    for atividade_nome, pontos_atividade in atividades.items():
+        ws = wb.create_sheet(title=atividade_nome[:31])
+        ws.append(["Nome", "Atividade", "Data", "Entrada", "Saída", "Total de Hora"])
+
+        for ponto in pontos_atividade:
+            entrada = ponto.entrada.strftime("%d/%m/%Y %H:%M")
+            saida = ponto.saida.strftime("%d/%m/%Y %H:%M") if ponto.saida else ""
+            total_horas = round((ponto.saida - ponto.entrada).total_seconds() / 3600, 2) if ponto.saida else ""
+            ws.append([
+                ponto.voluntario.pessoa.nome,
+                ponto.atividade.nome,
+                ponto.entrada.strftime("%d/%m/%Y"),
+                ponto.entrada.strftime("%H:%M"),
+                ponto.saida.strftime("%H:%M") if ponto.saida else "",
+                total_horas
+            ])
+
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    filename = f"Presenca_{mes}_{ano}.xlsx"
     return send_file(
-        buffer,
+        output,
+        download_name=filename,
         as_attachment=True,
-        download_name=f'relatorio_pulse_completo_mensal.xlsx',
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+@relatorios_bp.route("/relatorio/gerar_relatorio_dashboard_dia")
+@login_required
+def gerar_relatorio_dashboard_dia():
+    date_str = request.args.get('date')
+    if date_str:
+        try:
+            target_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        except ValueError:
+            target_date = datetime.utcnow().date()
+    else:
+        target_date = datetime.utcnow().date()
+
+    pontos = Ponto.query.join(Voluntario).join(Voluntario.pessoa).join(Atividade)\
+        .filter(Ponto.entrada >= datetime.combine(target_date, datetime.min.time()))\
+        .filter(Ponto.entrada <= datetime.combine(target_date, datetime.max.time())).all()
+
+    pontos_abertos = [p for p in pontos if not p.saida]
+
+    kpis = {
+        "Trabalhando Agora": len([p for p in pontos if not p.saida]),
+        f"Entradas em {target_date}": len(pontos),
+        f"Saídas em {target_date}": len([p for p in pontos if p.saida]),
+        "Total Voluntários Ativos": Voluntario.query.filter_by(status="ativo").count(),
+        "Total Atividades Ativas": Atividade.query.filter_by(ativo=True).count()
+    }
+
+    wb = Workbook()
+    wb.remove(wb.active)
+
+    ws_kpi = wb.create_sheet("Resumo_Dashboard_Dia")
+    ws_kpi.append(["Métrica", "Valor"])
+    for chave, valor in kpis.items():
+        ws_kpi.append([chave, valor])
+
+    for col_cells in ws_kpi.columns:
+        max_length = max(len(str(cell.value)) for cell in col_cells)
+        ws_kpi.column_dimensions[col_cells[0].column_letter].width = max_length + 2
+
+    ws_abertos = wb.create_sheet("Trabalhando_Agora")
+    ws_abertos.append(["Voluntário", "Entrada", "Origem"])
+    for p in pontos_abertos:
+        ws_abertos.append([
+            p.voluntario.pessoa.nome,
+            p.entrada.strftime('%Y-%m-%d %H:%M:%S'),
+            p.origem or ""
+        ])
+
+    for col_cells in ws_abertos.columns:
+        max_length = max(len(str(cell.value)) for cell in col_cells)
+        ws_abertos.column_dimensions[col_cells[0].column_letter].width = max_length + 2
+
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name=f'relatorio_pulse_dia_{target_date}.xlsx',
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )

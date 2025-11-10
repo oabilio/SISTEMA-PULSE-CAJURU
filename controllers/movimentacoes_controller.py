@@ -24,13 +24,15 @@ def add_movimentacao():
     id_voluntario = request.form.get("id_voluntario")
     origem_id = request.form.get("origem_id")
     destino_id = request.form.get("destino_id")
+    data = request.form.get("date")
 
     nova_movimentacao = Movimentacao(
         solicitante=solicitante,
         paciente=paciente,
         id_voluntario=id_voluntario,
         origem_id=origem_id,
-        destino_id=destino_id
+        destino_id=destino_id,
+        data=data
     )
 
     db.session.add(nova_movimentacao)
@@ -57,6 +59,7 @@ def update_movimentacao():
     movimentacao.id_voluntario = request.form.get("id_voluntario")
     movimentacao.origem_id = request.form.get("origem_id")
     movimentacao.destino_id = request.form.get("destino_id")
+    movimentacao.data = request.form.get("data")
 
     db.session.commit()
     flash("Movimentação atualizada com sucesso!", "success")

@@ -40,7 +40,7 @@ Lista de Movimentações
                 <th class="px-6 py-3">Voluntário</th>
                 <th class="px-6 py-3">Origem</th>
                 <th class="px-6 py-3">Destino</th>
-                <th class="px-6 py-3">Data/Hora</th>
+                <th class="px-6 py-3">Data</th>
                 <th class="px-6 py-3">Ações</th>
             </tr>
         </thead>
@@ -52,7 +52,7 @@ Lista de Movimentações
                 <td class="px-6 py-4">{{ mov.voluntario.pessoa.nome if mov.voluntario else "-" }}</td>
                 <td class="px-6 py-4">{{ mov.origem.nome if mov.origem else "-" }}</td>
                 <td class="px-6 py-4">{{ mov.destino.nome if mov.destino else "-" }}</td>
-                <td class="px-6 py-4">{{ mov.data.strftime('%d/%m/%Y %H:%M') if mov.data else "-" }}</td>
+                <td class="px-6 py-4">{{ mov.data.strftime('%d/%m/%Y') if mov.data else "-" }}</td>
                 <td class="px-6 py-4">
                     <a href="/editar_movimentacao?id={{ mov.id }}" class="font-medium text-blue-600 hover:underline">Editar</a>
                     |
