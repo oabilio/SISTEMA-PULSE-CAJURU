@@ -1,70 +1,118 @@
-<html>
+{% extends "base.html" %}
 
-<head>
-    <title>SISTEMA PULSE | Cadastrar Pessoa</title>
-</head>
+{% block title %}SISTEMA PULSE | Cadastro Pessoa{% endblock %}
 
-<body>
-    <h1>Cadastro de Pessoa</h1>
-    <form action="http://localhost:8080/add_pessoa" method="post">
-        <h2>Novo endereço:</h2>
-        <p>Logradouro:</p>
-        <p><input type="text" name="logradouro" placeholder="Logradouro" required /></p>
-        <p>Número:</p>
-        <p><input type="number" name="numero" placegolder="Número" /></p>
-        <p>Bairro:</p>
-        <p><input type="text" name="bairro" placeholder="Bairro" /></p>
-        <p>Cidade:</p>
-        <p><input type="text" name="cidade" placeholder="Cidade" required /></p>
-        <p>Estado:</p>
-        <select id="estado" name="estado" required>
-            <option value="">Selecione um estado</option>
-            <option value="AC">Acre (AC)</option>
-            <option value="AL">Alagoas (AL)</option>
-            <option value="AP">Amapá (AP)</option>
-            <option value="AM">Amazonas (AM)</option>
-            <option value="BA">Bahia (BA)</option>
-            <option value="CE">Ceará (CE)</option>
-            <option value="DF">Distrito Federal (DF)</option>
-            <option value="ES">Espírito Santo (ES)</option>
-            <option value="GO">Goiás (GO)</option>
-            <option value="MA">Maranhão (MA)</option>
-            <option value="MT">Mato Grosso (MT)</option>
-            <option value="MS">Mato Grosso do Sul (MS)</option>
-            <option value="MG">Minas Gerais (MG)</option>
-            <option value="PA">Pará (PA)</option>
-            <option value="PB">Paraíba (PB)</option>
-            <option value="PR">Paraná (PR)</option>
-            <option value="PE">Pernambuco (PE)</option>
-            <option value="PI">Piauí (PI)</option>
-            <option value="RJ">Rio de Janeiro (RJ)</option>
-            <option value="RN">Rio Grande do Norte (RN)</option>
-            <option value="RS">Rio Grande do Sul (RS)</option>
-            <option value="RO">Rondônia (RO)</option>
-            <option value="RR">Roraima (RR)</option>
-            <option value="SC">Santa Catarina (SC)</option>
-            <option value="SP">São Paulo (SP)</option>
-            <option value="SE">Sergipe (SE)</option>
-            <option value="TO">Tocantins (TO)</option>
-        </select>
-        <p>CEP:</p>
-        <p><input type="text" name="cep" placeholder="CEP"/></p>
-        <p>Complemento:</p>
-        <p><input type="text" name="complemento" placeholder="Complemento"/></p>
+{% block header_title %}
+Cadastrar Pessoa
+{% endblock %}
 
-        <h2>Nova pessoa:</h2>
-        <p>Nome:</p>
-        <p><input type="text" name="first_name" placeholder="Nome" required /></p>
-        <p>CPF:</p>
-        <p><input type="text" name="cpf" placeholder="CPF" /></p>
-        <p>Telefone:</p>
-        <p><input type="text" name="telefone" placeholder="Telefone" /></p>
-        <p>Email:</p>
-        <p><input type=text name="email" placeholder="Email" /></p>
-        <p>Data de Nascimento</p>
-        <p><input type="date" name="data_nasc" placeholder="Data de nascimento" /></p>
-        <p><input type="submit" value="Entrar" /></p>
+{% block content %}
+<div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="mb-4">
+        {% for category, message in messages %}
+        <div class="flash-message p-3 text-sm rounded-md transition duration-300 
+            {% if category == 'error' %}bg-red-100 text-red-700 border border-red-300
+            {% elif category == 'success' %}bg-green-100 text-green-700 border border-green-300
+            {% else %}bg-blue-100 text-blue-700 border border-blue-300{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form action="/add_pessoa" method="post" class="space-y-6">
+        {% if next_page %}
+        <input type="hidden" name="next_page" value="{{ next_page }}">
+        {% endif %}
+
+        <!-- Nome e CPF -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nome:</label>
+                <input type="text" name="name" id="name" placeholder="Nome" required
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+            </div>
+
+            <div>
+                <label for="cpf" class="block mb-2 text-sm font-medium text-gray-900">CPF:</label>
+                <input type="text" name="cpf" id="cpf" placeholder="CPF" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                    inputmode="numeric"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+            </div>
+        </div>
+
+        <!-- Telefone e Email -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="telefone" class="block mb-2 text-sm font-medium text-gray-900">Telefone:</label>
+                <input type="tel" name="telefone" id="telefone" placeholder="(XX) XXXXX-XXXX"
+                    pattern="\(\d{2}\) \d{4,5}-\d{4}" inputmode="tel"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+            </div>
+
+            <div>
+                <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email:</label>
+                <input type="email" name="email" id="email" placeholder="Email"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+            </div>
+        </div>
+
+        <!-- Data de Nascimento -->
+        <div>
+            <label for="data_nasc" class="block mb-2 text-sm font-medium text-gray-900">Data de Nascimento:</label>
+            <input type="date" name="data_nasc" id="data_nasc"
+                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+        </div>
+
+        <!-- Botões -->
+        <div class="flex items-center space-x-4 mt-6">
+            <button type="submit"
+                class="w-full text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Cadastrar Pessoa
+            </button>
+            <a href="{{ next_page or url_for('voluntarios.voluntarios') }}"
+                class="w-full text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Cancelar
+            </a>
+        </div>
     </form>
-</body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const telefoneInput = document.getElementById('telefone');
+            const cpfInput = document.getElementById('cpf');
 
-</html>
+            telefoneInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
+
+                if (value.length > 6) {
+                    e.target.value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+                } else if (value.length > 2) {
+                    e.target.value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+                } else if (value.length > 0) {
+                    e.target.value = `(${value}`;
+                }
+            });
+
+            cpfInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 11) value = value.slice(0, 11);
+
+                if (value.length > 9) {
+                    e.target.value = `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6, 9)}-${value.slice(9)}`;
+                } else if (value.length > 6) {
+                    e.target.value = `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6)}`;
+                } else if (value.length > 3) {
+                    e.target.value = `${value.slice(0, 3)}.${value.slice(3)}`;
+                } else {
+                    e.target.value = value;
+                }
+            });
+        });
+    </script>
+</div>
+{% endblock %}

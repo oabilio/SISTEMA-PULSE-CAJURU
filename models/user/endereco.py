@@ -1,6 +1,5 @@
-# endereco.py
+# models/user/endereco.py
 from models.db import db
-from datetime import date
 
 class Endereco(db.Model):
     __tablename__ = "endereco"
@@ -15,8 +14,9 @@ class Endereco(db.Model):
     cep = db.Column(db.String(20), nullable = True)
     complemento = db.Column(db.String(100), nullable = True)
 
-    def save_endereco(pessoa_id, logradouro, numero, bairro, cidade, estado, cep, complemento):
-        endereco = Endereco(pessoa_id=pessoa_id,
+    @classmethod
+    def save_endereco(cls, pessoa_id, logradouro, numero, bairro, cidade, estado, cep, complemento):
+        endereco = cls(pessoa_id=pessoa_id,
                             logradouro=logradouro,
                             numero=numero,
                             bairro=bairro,

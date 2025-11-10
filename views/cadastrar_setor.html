@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Cadastrar Setor{% endblock %}
+
+{% block header_title %}
+Cadastrar Setor
+{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="mb-4">
+        {% for category, message in messages %}
+        <div class="flash-message p-3 text-sm rounded-md transition duration-300
+            {% if category == 'error' %}bg-red-100 text-red-700 border border-red-300
+            {% elif category == 'success' %}bg-green-100 text-green-700 border border-green-300
+            {% else %}bg-blue-100 text-blue-700 border border-blue-300{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form action="/add_setor" method="post" class="space-y-6">
+
+        <!-- Nome do Setor -->
+        <div>
+            <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome do Setor:</label>
+            <input type="text" name="nome" id="nome" required
+                   class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+        </div>
+
+        <!-- Descrição -->
+        <div>
+            <label for="descricao" class="block mb-2 text-sm font-medium text-gray-900">Descrição:</label>
+            <textarea name="descricao" id="descricao" rows="4"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"></textarea>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex items-center space-x-4 mt-6">
+            <button type="submit"
+                    class="w-full text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Cadastrar Setor
+            </button>
+            <a href="{{ url_for('setores.setores') }}"
+               class="w-full text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

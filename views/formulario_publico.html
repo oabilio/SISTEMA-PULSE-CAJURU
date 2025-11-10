@@ -1,0 +1,507 @@
+<html>
+
+<head>
+    <title>Ficha de Intenção</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f7f9fc;
+            font-weight: 500;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="w-full max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+
+        <h2 class="text-2xl font-bold text-orange-600 mb-2">Ficha de Intenção Para Trabalho Voluntário</h2>
+        <p class="mb-2 text-sm text-gray-600">UUID do Formulário: <span class="font-mono text-gray-800">{{
+                pendencia.uuid_link }}</span></p>
+        <p class="mb-6 text-sm text-red-500 font-medium">Este formulário é único e pessoal. Não o compartilhe.</p>
+
+        <form action="" method="POST" class="space-y-8">
+
+            <!-- Seção 1: Dados Pessoais -->
+            <div class="space-y-4 border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-gray-800">1. Dados Pessoais</h3>
+
+                <!-- Nome, Data de Nascimento, Local de Nascimento -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="nome" class="block mb-2 text-sm font-medium text-gray-900">Nome Completo:</label>
+                        <input type="text" name="nome" id="nome" placeholder="Nome" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="data_nascimento" class="block mb-2 text-sm font-medium text-gray-900">Data de
+                            Nascimento:</label>
+                        <input type="date" name="data_nascimento" id="data_nascimento"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="local_nascimento" class="block mb-2 text-sm font-medium text-gray-900">Local de
+                            Nascimento:</label>
+                        <input type="text" name="local_nascimento" id="local_nascimento" placeholder="Cidade/Estado"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- CPF, Email -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="cpf" class="block mb-2 text-sm font-medium text-gray-900">CPF:</label>
+                        <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900">E-mail:</label>
+                        <input type="email" name="email" id="email" placeholder="email@exemplo.com"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Estado Civil, Nome do Cônjuge -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="estado_civil" class="block mb-2 text-sm font-medium text-gray-900">Estado
+                            Civil:</label>
+                        <input type="text" name="estado_civil" id="estado_civil" placeholder="Estado Civil"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="nome_conjuge" class="block mb-2 text-sm font-medium text-gray-900">Nome do Cônjuge
+                            (se
+                            aplicável):</label>
+                        <input type="text" name="nome_conjuge" id="nome_conjuge" placeholder="Nome do Cônjuge"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Nome do Pai, Nome da Mãe -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="nome_pai" class="block mb-2 text-sm font-medium text-gray-900">Nome do Pai:</label>
+                        <input type="text" name="nome_pai" id="nome_pai" placeholder="Nome do Pai"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="nome_mae" class="block mb-2 text-sm font-medium text-gray-900">Nome da Mãe:</label>
+                        <input type="text" name="nome_mae" id="nome_mae" placeholder="Nome da Mãe"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Endereço -->
+                <h4 class="text-lg font-semibold text-gray-700 pt-4">Endereço</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="endereco_residencial"
+                            class="block mb-2 text-sm font-medium text-gray-900">Logradouro:</label>
+                        <input type="text" name="endereco_residencial" id="endereco_residencial"
+                            placeholder="Rua/Avenida"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="numero" class="block mb-2 text-sm font-medium text-gray-900">Número:</label>
+                        <input type="text" name="numero" id="numero" placeholder="Número"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="bairro" class="block mb-2 text-sm font-medium text-gray-900">Bairro:</label>
+                        <input type="text" name="bairro" id="bairro" placeholder="Bairro"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="cidade" class="block mb-2 text-sm font-medium text-gray-900">Cidade:</label>
+                        <input type="text" name="cidade" id="cidade" placeholder="Cidade"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="cep" class="block mb-2 text-sm font-medium text-gray-900">CEP:</label>
+                        <input type="text" name="cep" id="cep" placeholder="00000-000"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="tel_residencial" class="block mb-2 text-sm font-medium text-gray-900">Telefone
+                            Residencial:</label>
+                        <input type="tel" name="tel_residencial" id="tel_residencial" placeholder="(XX) XXXX-XXXX"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="celular" class="block mb-2 text-sm font-medium text-gray-900">Celular:</label>
+                        <input type="tel" name="celular" id="celular" placeholder="(XX) XXXXX-XXXX"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Religião, Escolaridade -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="religiao" class="block mb-2 text-sm font-medium text-gray-900">Religião:</label>
+                        <input type="text" name="religiao" id="religiao" placeholder="Religião"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="escolaridade_curso"
+                            class="block mb-2 text-sm font-medium text-gray-900">Escolaridade /
+                            Curso:</label>
+                        <input type="text" name="escolaridade_curso" id="escolaridade_curso"
+                            placeholder="Escolaridade / Curso"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Local de Trabalho, Telefone Trabalho -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="local_trabalho" class="block mb-2 text-sm font-medium text-gray-900">Local de
+                            Trabalho:</label>
+                        <input type="text" name="local_trabalho" id="local_trabalho" placeholder="Local de Trabalho"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="telefone_trabalho" class="block mb-2 text-sm font-medium text-gray-900">Telefone do
+                            Trabalho:</label>
+                        <input type="text" name="telefone_trabalho" id="telefone_trabalho" placeholder="(XX) XXXX-XXXX"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- OCUPAÇÃO -->
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                    <div>
+                        <label for="ocupacao" class="block mb-2 text-sm font-medium text-gray-900">Ocupação:</label>
+                        <select name="ocupacao" id="ocupacao"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                            onchange="toggleField(this, 'ocupacao_outro')">
+                            <option value="">Selecione</option>
+                            <option value="Aposentado">Aposentado</option>
+                            <option value="Empregado">Empregado</option>
+                            <option value="Autônomo">Autônomo</option>
+                            <option value="Do lar">Do lar</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div id="ocupacao_outro" class="hidden">
+                        <label for="ocupacao_outro_texto" class="block mb-2 text-sm font-medium text-gray-900">Qual sua
+                            ocupação?</label>
+                        <input type="text" name="ocupacao_outro_texto" id="ocupacao_outro_texto"
+                            placeholder="Informe sua ocupação"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- TRATAMENTO DE SAÚDE -->
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                    <div>
+                        <label for="tratamento_saude" class="block mb-2 text-sm font-medium text-gray-900">Faz
+                            tratamento de
+                            saúde / acompanhamento médico?</label>
+                        <select name="tratamento_saude" id="tratamento_saude"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                            onchange="toggleField(this, 'campo_tratamento')">
+                            <option value="">Selecione</option>
+                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option>
+                        </select>
+                    </div>
+                    <div id="campo_tratamento" class="hidden">
+                        <label for="tratamento_saude_para" class="block mb-2 text-sm font-medium text-gray-900">Para
+                            quê?</label>
+                        <input type="text" name="tratamento_saude_para" id="tratamento_saude_para"
+                            placeholder="Informe o tratamento ou acompanhamento"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Transporte e Como ficou sabendo -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="transporte" class="block mb-2 text-sm font-medium text-gray-900">Transporte
+                            utilizado:</label>
+                        <input type="text" name="transporte" id="transporte" placeholder="Carro, Ônibus, Moto, etc."
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="como_soube_voluntariado" class="block mb-2 text-sm font-medium text-gray-900">Como
+                            ficou
+                            sabendo do voluntariado:</label>
+                        <input type="text" name="como_soube_voluntariado" id="como_soube_voluntariado"
+                            placeholder="Amigos, Redes Sociais, etc."
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção 2: Experiências -->
+            <div class="space-y-4 border-b border-gray-200 pb-6">
+                <h3 class="text-xl font-semibold text-gray-800">2. Experiências</h3>
+
+                <!-- Trabalhou como voluntário -->
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label for="ja_trabalhou_voluntario" class="block mb-2 text-sm font-medium text-gray-900">Já
+                            trabalhou como voluntário?</label>
+                        <select name="ja_trabalhou_voluntario" id="ja_trabalhou_voluntario"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                            onchange="toggleField(this, 'onde_voluntario')">
+                            <option value="">Selecione</option>
+                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option>
+                        </select>
+                    </div>
+                    <div id="onde_voluntario" class="hidden">
+                        <label for="ja_trabalhou_voluntario_onde"
+                            class="block mb-2 text-sm font-medium text-gray-900">Onde
+                            você trabalhou como voluntário?</label>
+                        <input type="text" name="ja_trabalhou_voluntario_onde" id="ja_trabalhou_voluntario_onde"
+                            placeholder="Nome da organização"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Grupo de voluntariado -->
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label for="faz_parte_grupo_voluntariado"
+                            class="block mb-2 text-sm font-medium text-gray-900">Faz
+                            parte de algum grupo de voluntariado?</label>
+                        <select name="faz_parte_grupo_voluntariado" id="faz_parte_grupo_voluntariado"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                            onchange="toggleField(this, 'grupo_voluntariado')">
+                            <option value="">Selecione</option>
+                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option>
+                        </select>
+                    </div>
+                    <div id="grupo_voluntariado" class="hidden">
+                        <label for="qual_grupo_voluntariado" class="block mb-2 text-sm font-medium text-gray-900">Qual
+                            grupo?</label>
+                        <input type="text" name="qual_grupo_voluntariado" id="qual_grupo_voluntariado"
+                            placeholder="Qual grupo de voluntariado?"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Contribuição -->
+                <div>
+                    <label for="contribuicao_voluntariado" class="block mb-2 text-sm font-medium text-gray-900">Como
+                        você
+                        pode contribuir / O que é ser voluntário para você?</label>
+                    <textarea name="contribuicao_voluntariado" id="contribuicao_voluntariado" rows="3"
+                        placeholder="Descreva suas habilidades e motivações."
+                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"></textarea>
+                </div>
+
+                <!-- Habilidade musical -->
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label for="habilidade_musical_select" class="block mb-2 text-sm font-medium text-gray-900">Tem
+                            alguma habilidade musical?</label>
+                        <select name="habilidade_musical" id="habilidade_musical_select"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                            onchange="toggleField(this, 'habilidade_musical_campo')">
+                            <option value="">Selecione</option>
+                            <option value="Sim">Sim</option>
+                            <option value="Não">Não</option>
+                        </select>
+                    </div>
+                    <div id="habilidade_musical_campo" class="hidden">
+                        <label for="qual_habilidade_musical"
+                            class="block mb-2 text-sm font-medium text-gray-900">Qual?</label>
+                        <input type="text" name="qual_habilidade_musical" id="qual_habilidade_musical"
+                            placeholder="Qual habilidade musical?"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                    </div>
+                </div>
+
+                <!-- Alimentação -->
+                <div>
+                    <label for="auxiliar_alimentacao" class="block mb-2 text-sm font-medium text-gray-900">Sente-se à
+                        vontade para auxiliar um paciente na alimentação?</label>
+                    <select name="auxiliar_alimentacao" id="auxiliar_alimentacao"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                        <option value="">Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Seção 3: Disponibilidade -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">3. Disponibilidade</h3>
+
+                <p class="text-sm text-gray-600 mb-4">Selecione o intervalo de horário em que você tem disponibilidade
+                    em cada dia da semana:<br>(Máx 15 hs semanais – M/T/N até às 22 hs)</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">Segunda-feira:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="time" name="segunda_inicio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                            <span class="text-gray-500">até</span>
+                            <input type="time" name="segunda_fim"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">Terça-feira:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="time" name="terca_inicio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                            <span class="text-gray-500">até</span>
+                            <input type="time" name="terca_fim"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">Quarta-feira:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="time" name="quarta_inicio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                            <span class="text-gray-500">até</span>
+                            <input type="time" name="quarta_fim"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">Quinta-feira:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="time" name="quinta_inicio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                            <span class="text-gray-500">até</span>
+                            <input type="time" name="quinta_fim"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">Sexta-feira:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="time" name="sexta_inicio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                            <span class="text-gray-500">até</span>
+                            <input type="time" name="sexta_fim"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">Sábado:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="time" name="sabado_inicio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                            <span class="text-gray-500">até</span>
+                            <input type="time" name="sabado_fim"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">Domingo:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="time" name="domingo_inicio"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                            <span class="text-gray-500">até</span>
+                            <input type="time" name="domingo_fim"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Botão de Enviar -->
+            <div class="mt-8">
+                <button type="submit"
+                    class="w-full text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-md px-5 py-3 text-center transition duration-200 shadow-md">
+                    Enviar Ficha de Intenção
+                </button>
+            </div>
+        </form>
+
+        <script>
+            function toggleField(selectElem, targetId) {
+                const target = document.getElementById(targetId);
+                if (!target) return;
+
+                if (selectElem.name === "ocupacao") {
+                    target.style.display = (selectElem.value === "Outro") ? "block" : "none";
+                    return;
+                }
+
+                target.style.display = (selectElem.value === "Sim") ? "block" : "none";
+            }
+            document.addEventListener("DOMContentLoaded", () => {
+                const cpfInput = document.getElementById("cpf");
+
+                cpfInput.addEventListener("input", () => {
+                    let value = cpfInput.value.replace(/\D/g, "");
+
+                    if (value.length > 11) value = value.slice(0, 11);
+
+                    if (value.length > 9) {
+                        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, "$1.$2.$3-$4");
+                    } else if (value.length > 6) {
+                        value = value.replace(/(\d{3})(\d{3})(\d{0,3})/, "$1.$2.$3");
+                    } else if (value.length > 3) {
+                        value = value.replace(/(\d{3})(\d{0,3})/, "$1.$2");
+                    }
+
+                    cpfInput.value = value;
+                });
+            });
+
+            const aplicarMascaraTelefone = (input) => {
+                input.addEventListener("input", () => {
+                    let value = input.value.replace(/\D/g, "");
+
+                    if (value.length > 11) value = value.slice(0, 11);
+
+                    if (value.length > 10) {
+
+                        value = value.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+                    } else if (value.length > 6) {
+
+                        value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+                    } else if (value.length > 2) {
+
+                        value = value.replace(/(\d{2})(\d{0,5})/, "($1) $2");
+                    } else if (value.length > 0) {
+                        value = value.replace(/(\d{0,2})/, "($1");
+                    }
+
+                    input.value = value;
+                });
+            };
+
+            const telResidencial = document.getElementById("tel_residencial");
+            const celular = document.getElementById("celular");
+            const telTrabalho = document.getElementById("telefone_trabalho");
+
+            [telResidencial, celular, telTrabalho].forEach(input => {
+                if (input) aplicarMascaraTelefone(input);
+            });
+        </script>
+</body>
+
+</html>

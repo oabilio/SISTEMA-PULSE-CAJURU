@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}SISTEMA PULSE | Editar Ponto{% endblock %}
+
+{% block header_title %}
+    Editar Registro de Ponto
+{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+    <h3 class="text-lg font-semibold mb-4">Voluntário: {{ ponto.voluntario.pessoa.nome }}</h3>
+    
+    <form action="{{ url_for('ponto.editar_ponto', ponto_id=ponto.id) }}" method="POST">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="entrada" class="block mb-2 text-sm font-medium text-gray-900">Entrada:</label>
+                <input type="datetime-local" name="entrada" id="entrada" required
+                       value="{{ ponto.entrada.isoformat() }}"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+            </div>
+            <div>
+                <label for="saida" class="block mb-2 text-sm font-medium text-gray-900">Saída (opcional):</label>
+                <input type="datetime-local" name="saida" id="saida"
+                       value="{{ ponto.saida.isoformat() if ponto.saida else '' }}"
+                       class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="atividade_id" class="block mb-2 text-sm font-medium text-gray-900">Atividade:</label>
+            <select name="atividade_id" id="atividade_id"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5">
+                <option value="">-- Selecione uma atividade --</option>
+                {% for atividade in atividades %}
+                <option value="{{ atividade.id }}"
+                        {% if ponto.atividade and ponto.atividade.id == atividade.id %}selected{% endif %}>
+                    {{ atividade.nome }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="observacao" class="block mb-2 text-sm font-medium text-gray-900">Observação:</label>
+            <textarea name="observacao" id="observacao" rows="3"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
+                      placeholder="Ex: Correção de horário">{{ ponto.observacao or '' }}</textarea>
+        </div>
+
+        <div class="flex items-center space-x-4 mt-6">
+            <button type="submit"
+                    class="w-full text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Atualizar Registro
+            </button>
+            <a href="{{ url_for('ponto.ponto') }}" 
+               class="w-full text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

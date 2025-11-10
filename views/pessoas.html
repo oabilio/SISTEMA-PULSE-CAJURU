@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}SISTEMA PULSE | Usuários{% endblock %}
+{% block title %}SISTEMA PULSE | Pessoas{% endblock %}
 
 {% block header_title %}
-Lista de Usuários
+Lista de Pessoas
 {% endblock %}
 
 {% block content %}
 <div class="mb-4">
-    <a href="{{ url_for('usuarios.cadastrar_usuario') }}"
+    <a href="{{ url_for('pessoas.cadastrar_pessoa', next=request.path) }}"
        class="text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition duration-200">
-        + Novo Usuário
+        + Nova Pessoa
     </a>
 </div>
 
@@ -36,47 +36,42 @@ Lista de Usuários
 {% endwith %}
 
 <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-    <h2 class="text-2xl font-bold text-indigo-700 mb-4">Usuários Cadastrados</h2>
+    <h2 class="text-2xl font-bold text-indigo-700 mb-4">Pessoas Cadastradas</h2>
 
-    {% if usuarios %}
+    {% if pessoas %}
     <table class="w-full text-sm text-left text-gray-700">
         <thead class="text-xs text-gray-900 uppercase bg-gray-100">
             <tr>
                 <th class="px-6 py-3">Nome</th>
-                <th class="px-6 py-3">Login</th>
-                <th class="px-6 py-3">Função</th>
-                <th class="px-6 py-3">Status</th>
+                <th class="px-6 py-3">Telefone</th>
+                <th class="px-6 py-3">Email</th>
+                <th class="px-6 py-3">Criada em</th>
                 <th class="px-6 py-3">Ações</th>
             </tr>
         </thead>
         <tbody>
-            {% for usuario in usuarios %}
+            {% for pessoa in pessoas %}
             <tr class="bg-white border-b hover:bg-gray-50">
-                <td class="px-6 py-4 font-medium text-gray-900">{{ usuario.pessoa.nome }}</td>
-                <td class="px-6 py-4">{{ usuario.login }}</td>
-                <td class="px-6 py-4">{{ usuario.role.name }}</td>
-                <td class="px-6 py-4">{{ usuario.status }}</td>
+                <td class="px-6 py-4 font-medium text-gray-900">{{ pessoa.nome }}</td>
+                <td class="px-6 py-4">{{ pessoa.telefone or '-' }}</td>
+                <td class="px-6 py-4">{{ pessoa.email }}</td>
+                <td class="px-6 py-4">{{ pessoa.criado_em.strftime('%d/%m/%Y %H:%M')}}</td>
                 <td class="px-6 py-4">
-                    <a href="{{ url_for('usuarios.editar_usuario', usuario_id=usuario.id) }}"
+                    <a href="{{ url_for('pessoas.editar_pessoa', id=pessoa.id) }}"
                        class="font-medium text-blue-600 hover:underline">
                         Editar
                     </a>
-                    {% if usuario.status == 'ativo' %}
-                    <a href="{{ url_for('usuarios.deletar_usuario', usuario_id=usuario.id) }}"
-                       class="font-medium text-red-600 hover:underline ml-3"
-                       onclick="return confirm('Deseja realmente desativar este usuário?')">
-                        Desativar
+                    <a href="{{ url_for('pessoas.info_pessoa', id=pessoa.id) }}"
+                       class="font-medium text-gray-600 hover:underline ml-3">
+                        Info
                     </a>
-                    {% else %}
-                    <span class="font-medium text-gray-400 ml-3">Inativo</span>
-                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p class="text-gray-500">Nenhum usuário cadastrado no momento.</p>
+    <p class="text-gray-500">Nenhuma pessoa cadastrada no momento.</p>
     {% endif %}
 </div>
 {% endblock %}

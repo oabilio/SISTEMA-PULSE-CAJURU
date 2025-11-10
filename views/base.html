@@ -1,0 +1,194 @@
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+            rel="stylesheet">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css">
+        <style>
+            body {
+                font-family: 'Open Sans', sans-serif;
+                background-color: #f7f9fc;
+                font-weight: 500;
+            }
+        </style>
+    </head>
+    <body class="flex h-screen overflow-hidden">
+
+        <div id="dynamic-flash-container" style="position: fixed; top: 1rem; right: 1rem; z-index: 100;"></div>
+
+        <div id="sidebar" class="flex flex-col w-72 bg-[#2d3753] text-white fixed h-full z-10 shadow-lg">
+
+            <div class="p-6 border-b border-white/10 flex items-center justify-center h-20">
+                <img src="{{ url_for('static', filename='img/pulse.png') }}" alt="Logo Pulse Gestão de Voluntariado"
+                    class="h-14">
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+
+                {% set current_path = request.path %}
+
+                <a href="{{ url_for('home') }}"
+                    class="flex items-center p-3 rounded-lg transition duration-200 
+               {% if current_path == '/home' or current_path == '/' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-house w-5 h-5 mr-3"></i>
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('ponto.ponto') }}"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+           {% if '/ponto' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-clock w-5 h-5 mr-3"></i>
+                    Registros de Ponto
+                </a>
+
+                <a href="{{ url_for('voluntarios.voluntarios') }}"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+           {% if current_path == '/voluntarios' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-users w-5 h-5 mr-3"></i>
+                    Voluntários
+                </a>
+
+                <li class="flex flex-col">
+                    {% set active_acomp = current_path in ['/setores', '/movimentacoes'] %}
+                    <button type="button"
+                        class="flex items-center justify-between p-3 rounded-lg w-full text-gray-300 hover:bg-[#394263] hover:text-white"
+                        onclick="toggleDropdown(this)">
+                        <span class="flex items-center">
+                            <i class="fa-solid fa-route w-5 h-5 mr-3"></i>
+                            A. Solidário
+                        </span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+
+                    <div
+                        class="flex flex-col ml-6 mt-1 space-y-1 overflow-hidden max-h-0 transition-[max-height] duration-300 {% if active_acomp %}max-h-40{% endif %}">
+                        <a href="{{url_for('setores.setores')}}"
+                            class="p-2 rounded-lg {% if current_path == '/setores' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                            Setores
+                        </a>
+                        <a href="{{url_for('movimentacoes.movimentacoes')}}"
+                            class="p-2 rounded-lg {% if current_path == '/movimentacoes' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                            Movimentações
+                        </a>
+                    </div>
+                </li>
+
+                <a href="{{ url_for('atividades.atividades') }}"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+           {% if '/atividades' in current_path %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-clipboard-user w-5 h-5 mr-3"></i>
+                    Atividades
+                </a>
+
+                <a href="/relatorios"
+                    class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-[#394263] hover:text-white transition duration-200
+           {% if current_path == '/relatorios' %}bg-[#4a5574] text-white shadow-inner{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                    <i class="fa-solid fa-table w-5 h-5 mr-3"></i>
+                    Relatórios
+                </a>
+
+                <li class="flex flex-col">
+                    {% set active_acomp = current_path in ['/documentacoes', '/pendentes'] %}
+                    <button type="button"
+                        class="flex items-center justify-between p-3 rounded-lg w-full text-gray-300 hover:bg-[#394263] hover:text-white"
+                        onclick="toggleDropdown(this)">
+                        <span class="flex items-center">
+                            <i class="fa-solid fa-file-contract w-5 h-5 mr-3"></i>
+                            Documentações
+                        </span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+
+                    <div
+                        class="flex flex-col ml-6 mt-1 space-y-1 overflow-hidden max-h-0 transition-[max-height] duration-300 {% if active_acomp %}max-h-40{% endif %}">
+                        <a href="{{url_for('documentacoes.lista_documentacoes')}}"
+                            class="p-2 rounded-lg {% if current_path == '/documentacoes' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                            Relação Por Voluntário
+                        </a>
+                        <a href="{{url_for('pendencias.lista_pendencias')}}"
+                            class="p-2 rounded-lg {% if current_path == '/pendentes' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                            Fichas de Intenção
+                        </a>
+                    </div>
+                </li>
+
+                {% if current_user.is_authenticated and current_user.has_role('admin') %}
+                <li class="flex flex-col">
+                    {% set active_admin = current_path in ['/pessoas', '/usuarios', '/logs'] %}
+                    <button type="button"
+                        class="flex items-center justify-between p-3 rounded-lg w-full text-gray-300 hover:bg-[#394263] hover:text-white"
+                        onclick="toggleDropdown(this)">
+                        <span class="flex items-center">
+                            <i class="fa-solid fa-user-gear w-5 h-5 mr-3"></i>
+                            Admin
+                        </span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+
+                    <div
+                        class="flex flex-col ml-6 mt-1 space-y-1 overflow-hidden max-h-0 transition-[max-height] duration-300 {% if active_admin %}max-h-60{% endif %}">
+                        <a href="{{ url_for('pessoas.pessoas') }}"
+                            class="p-2 rounded-lg {% if current_path == '/pessoas' %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                            Pessoas
+                        </a>
+                        <a href="{{ url_for('usuarios.usuarios') }}"
+                            class="p-2 rounded-lg {% if '/usuarios' in current_path %}bg-[#4a5574] text-white{% else %}text-gray-300 hover:bg-[#394263] hover:text-white{% endif %}">
+                            Usuários
+                        </a>
+                    </div>
+                </li>
+                {% endif %}
+
+            </nav>
+
+            <div class="p-4 border-t border-white/10">
+                {% if current_user.is_authenticated %}
+                <div class="flex items-center text-base">
+                    <span class="truncate"><i class="fa-solid fa-user mr-1"></i> Olá, {{ current_user.login }}</span>
+                </div>
+                <a href="{{ url_for('login.logout') }}" class="text-base text-red-400 hover:text-red-300 mt-2 block">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Sair
+                </a>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div id="main-content" class="flex-1 flex flex-col overflow-y-auto ml-72">
+
+            <header class="bg-white shadow-sm p-4 h-20 flex items-center border-b border-gray-200">
+                <h1 class="text-xl font-semibold text-gray-800">{% block header_title %}{% endblock %}</h1>
+            </header>
+
+            <main class="flex-1 p-6">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+
+        <script>
+            function toggleDropdown(button) {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i.fa-chevron-down');
+
+                if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                    content.style.maxHeight = '0';
+                } else {
+                    content.style.maxHeight = '240px';
+                }
+
+                icon.classList.toggle('rotate-180');
+            }
+        </script>
+
+        <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+        {% block scripts %}{% endblock %}
+    </body>
+</html>
